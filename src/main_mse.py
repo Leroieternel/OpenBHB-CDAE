@@ -84,7 +84,7 @@ def parse_arguments():
     return opts
 
 def get_transforms(opts):
-    selector = FeatureExtractor("vbm")
+    selector = FeatureExtractor("quasiraw")
     
     if opts.tf == 'none':
         aug = transforms.Lambda(lambda x: x)

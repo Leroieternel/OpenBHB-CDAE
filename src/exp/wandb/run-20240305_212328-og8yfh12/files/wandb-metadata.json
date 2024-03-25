@@ -1,0 +1,88 @@
+{
+    "os": "Linux-4.19.0-26-amd64-x86_64-with-glibc2.10",
+    "python": "3.8.5",
+    "heartbeatAt": "2024-03-05T20:23:29.804398",
+    "startedAt": "2024-03-05T20:23:28.996421",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/jiaxia/contrastive-brain-age-prediction/src/exp/wandb_test.py",
+    "codePathLocal": "wandb_test.py",
+    "codePath": "src/exp/wandb_test.py",
+    "git": {
+        "remote": "https://github.com/EIDOSLAB/contrastive-brain-age-prediction.git",
+        "commit": "2fe9e7b81dd53d8f43dfeb34e41250f5450c1094"
+    },
+    "email": null,
+    "root": "/home/jiaxia/contrastive-brain-age-prediction",
+    "host": "murgul",
+    "username": "jiaxia",
+    "executable": "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-2/bin/python",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 4132.306250000001,
+        "min": 800.0,
+        "max": 4900.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 4083.915,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 4056.702,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 4492.377,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 3987.355,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 4532.767,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 4084.724,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 4291.6,
+            "min": 800.0,
+            "max": 4900.0
+        },
+        {
+            "current": 3529.01,
+            "min": 800.0,
+            "max": 4900.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 441.865234375,
+            "used": 146.046875
+        }
+    },
+    "gpu": "Quadro P400",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "Quadro P400",
+            "memory_total": 2097086464
+        }
+    ],
+    "memory": {
+        "total": 31.331626892089844
+    }
+}

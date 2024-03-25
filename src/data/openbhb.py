@@ -11,13 +11,16 @@ from nilearn.masking import unmask
 def bin_age(age_real: torch.Tensor):
     bins = [i for i in range(4, 92, 2)]
     age_binned = age_real.clone()
-    for value in bins[::-1]:
+    # bins[::-1]: [90, 88, 86, 84, 82, 80, 78, 76, 74, 72, 70, 68, 66, 64, 62, 60, 58, 56, 
+    # 54, 52, 50, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4]
+    for value in bins[::-1]:    
         age_binned[age_real <= value] = value
     return age_binned.long()
 
 def read_data(path, dataset, fast):
     print(f"Read {dataset.upper()}")
     df = pd.read_csv(os.path.join(path, dataset + ".tsv"), sep="\t")
+    # df = pd.read_csv(os.path.join(path, "test" + ".tsv"), sep="\t")
     df.loc[df["split"] == "external_test", "site"] = np.nan
 
     y_arr = df[["age", "site"]].values
@@ -31,8 +34,7 @@ def read_data(path, dataset, fast):
     return x_arr, y_arr
 
 class OpenBHB(torch.utils.data.Dataset):
-    def __init__(self, root, train=True, internal=True, transform=None, 
-                 label="cont", fast=False, load_feats=None):
+    def __init__(self, root, train=True, internal=True, transform=None, fast=False, load_feats=None):
         self.root = root
 
         if train and not internal:
@@ -44,13 +46,13 @@ class OpenBHB(torch.utils.data.Dataset):
         dataset = "train"
         if not train:
             if internal:
-                dataset = "internal_test"
+                dataset = "internal_val"
             else:
-                dataset = "external_test"
+                dataset = "external_val"
         
         self.X, self.y = read_data(root, dataset, fast)
         self.T = transform
-        self.label = label
+        # self.label = label
         self.fast = fast
 
         self.bias_feats = None
@@ -58,12 +60,13 @@ class OpenBHB(torch.utils.data.Dataset):
             print("Loading biased features", load_feats)
             self.bias_feats = torch.load(load_feats, map_location="cpu")
         
-        print(f"Read {len(self.X)} records")
+        print(f"Read {len(self.X)} records")      # total length of current reading samples
 
     def __len__(self):
         return len(self.y)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index):   # not been called
+        print('************************ getitem ************************')
         if not self.fast:
             x = self.X[index]
         else:
@@ -76,8 +79,8 @@ class OpenBHB(torch.utils.data.Dataset):
         
         # sample, age, site
         age, site = y[0], y[1]
-        if self.label == "bin":
-            age = bin_age(torch.tensor(age))
+        # if self.label == "bin":
+        #     age = bin_age(torch.tensor(age))
         
         if self.bias_feats is not None:
             return x, age, self.bias_feats[index]
@@ -155,7 +158,7 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
             thr = self.MASKS[key]["thr"]
             arr[arr <= thr] = 0
             arr[arr > thr] = 1
-            self.masks[key] = nibabel.Nifti1Image(arr.astype(int), np.eye(4))
+            self.masks[key] = nibabel.Nifti1Image(arr.astype(np.int32), np.eye(4))
 
     def fit(self, X, y):
         return self
@@ -176,27 +179,3 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
         select_X = select_X.reshape(self.MODALITIES[self.dtype]["shape"])
         # print('transformed.shape', select_X.shape)
         return select_X
-
-
-if __name__ == '__main__':
-    import sys
-    from torchvision import transforms
-    from .transforms import Crop, Pad
-
-    selector = FeatureExtractor("vbm")
-
-    T_pre = transforms.Lambda(lambda x: selector.transform(x))
-    T_train = transforms.Compose([
-        T_pre,
-        Crop((1, 121, 128, 121), type="random"),
-        Pad((1, 128, 128, 128)),
-        transforms.Lambda(lambda x: torch.from_numpy(x)),
-        transforms.Normalize(mean=0.0, std=1.0)
-    ])
-
-    train_loader = torch.utils.data.DataLoader(OpenBHB(sys.argv[1], train=True, internal=True, transform=T_train),
-                                               batch_size=3, shuffle=True, num_workers=8,
-                                               persistent_workers=True)
-    
-    x, y1, y2 = next(iter(train_loader))
-    print(x.shape, y1, y2)
