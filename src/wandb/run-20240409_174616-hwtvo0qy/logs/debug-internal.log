@@ -1,0 +1,193 @@
+2024-04-09 17:46:16,266 INFO    StreamThr :5976 [internal.py:wandb_internal():86] W&B internal server running at pid: 5976, started at: 2024-04-09 17:46:16.264202
+2024-04-09 17:46:16,268 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: status
+2024-04-09 17:46:16,271 INFO    WriterThread:5976 [datastore.py:open_for_write():87] open: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/run-hwtvo0qy.wandb
+2024-04-09 17:46:16,274 DEBUG   SenderThread:5976 [sender.py:send():378] send: header
+2024-04-09 17:46:16,338 DEBUG   SenderThread:5976 [sender.py:send():378] send: run
+2024-04-09 17:46:16,699 INFO    SenderThread:5976 [dir_watcher.py:__init__():211] watching files in: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files
+2024-04-09 17:46:16,699 INFO    SenderThread:5976 [sender.py:_start_run_threads():1099] run started: hwtvo0qy with start time 1712677576.26486
+2024-04-09 17:46:16,706 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: check_version
+2024-04-09 17:46:16,707 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: check_version
+2024-04-09 17:46:16,807 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: run_start
+2024-04-09 17:46:16,812 DEBUG   HandlerThread:5976 [system_info.py:__init__():26] System info init
+2024-04-09 17:46:16,812 DEBUG   HandlerThread:5976 [system_info.py:__init__():41] System info init done
+2024-04-09 17:46:16,812 INFO    HandlerThread:5976 [system_monitor.py:start():194] Starting system monitor
+2024-04-09 17:46:16,812 INFO    SystemMonitor:5976 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-04-09 17:46:16,813 INFO    HandlerThread:5976 [system_monitor.py:probe():214] Collecting system info
+2024-04-09 17:46:16,813 INFO    SystemMonitor:5976 [interfaces.py:start():190] Started cpu monitoring
+2024-04-09 17:46:16,814 INFO    SystemMonitor:5976 [interfaces.py:start():190] Started disk monitoring
+2024-04-09 17:46:16,815 INFO    SystemMonitor:5976 [interfaces.py:start():190] Started gpu monitoring
+2024-04-09 17:46:16,816 INFO    SystemMonitor:5976 [interfaces.py:start():190] Started memory monitoring
+2024-04-09 17:46:16,817 INFO    SystemMonitor:5976 [interfaces.py:start():190] Started network monitoring
+2024-04-09 17:46:16,852 DEBUG   HandlerThread:5976 [system_info.py:probe():150] Probing system
+2024-04-09 17:46:16,860 DEBUG   HandlerThread:5976 [system_info.py:_probe_git():135] Probing git
+2024-04-09 17:46:16,879 DEBUG   HandlerThread:5976 [system_info.py:_probe_git():143] Probing git done
+2024-04-09 17:46:16,879 DEBUG   HandlerThread:5976 [system_info.py:probe():198] Probing system done
+2024-04-09 17:46:16,879 DEBUG   HandlerThread:5976 [system_monitor.py:probe():223] {'os': 'Linux-4.19.0-26-amd64-x86_64-with-glibc2.10', 'python': '3.8.5', 'heartbeatAt': '2024-04-09T15:46:16.852827', 'startedAt': '2024-04-09T15:46:16.228106', 'docker': None, 'cuda': None, 'args': ('--data_dir', '/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data', '--save_dir', '/home/jiaxia/brain-age-mri', '--model', 'unet', '--epochs', '1', '--lr', '1e-4', '--lr_decay', 'step', '--lr_decay_rate', '0.9', '--lr_decay_step', '10', '--momentum', '0.9', '--weight_decay', '5e-5', '--train_all', '1', '--trial', '0', '--tf', 'none'), 'state': 'running', 'program': '/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py', 'codePathLocal': 'main_0322.py', 'codePath': 'src/main_0322.py', 'git': {'remote': 'https://github.com/Leroieternel/openBHB-project.git', 'commit': 'dd297748ceff7c2821ca8576b55ee5b5b0aa5554'}, 'email': '1816020611@qq.com', 'root': '/home/jiaxia/unet_test/contrastive-brain-age-prediction', 'host': 'biwirender13', 'username': 'jiaxia', 'executable': '/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 24, 'cpu_freq': {'current': 1517.6277916666666, 'min': 1200.0, 'max': 3300.0}, 'cpu_freq_per_core': [{'current': 1200.267, 'min': 1200.0, 'max': 3300.0}, {'current': 1436.41, 'min': 1200.0, 'max': 3300.0}, {'current': 3199.644, 'min': 1200.0, 'max': 3300.0}, {'current': 3198.813, 'min': 1200.0, 'max': 3300.0}, {'current': 1300.114, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.579, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.681, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.588, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.42, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.853, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.271, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.832, 'min': 1200.0, 'max': 3300.0}, {'current': 1785.947, 'min': 1200.0, 'max': 3300.0}, {'current': 1646.331, 'min': 1200.0, 'max': 3300.0}, {'current': 1461.084, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.323, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.258, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.703, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.502, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.282, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.767, 'min': 1200.0, 'max': 3300.0}, {'current': 3186.025, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.595, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.778, 'min': 1200.0, 'max': 3300.0}], 'disk': {'/': {'total': 36.367408752441406, 'used': 13.047584533691406}}, 'gpu': 'NVIDIA TITAN Xp', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA TITAN Xp', 'memory_total': 12788498432}], 'memory': {'total': 503.794979095459}}
+2024-04-09 17:46:16,879 INFO    HandlerThread:5976 [system_monitor.py:probe():224] Finished collecting system info
+2024-04-09 17:46:16,879 INFO    HandlerThread:5976 [system_monitor.py:probe():227] Publishing system info
+2024-04-09 17:46:16,879 DEBUG   HandlerThread:5976 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-04-09 17:46:17,704 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/conda-environment.yaml
+2024-04-09 17:46:20,686 DEBUG   HandlerThread:5976 [system_info.py:_save_conda():219] Saving conda packages done
+2024-04-09 17:46:20,690 INFO    HandlerThread:5976 [system_monitor.py:probe():229] Finished publishing system info
+2024-04-09 17:46:20,705 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/conda-environment.yaml
+2024-04-09 17:46:20,705 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/wandb-metadata.json
+2024-04-09 17:46:20,707 DEBUG   SenderThread:5976 [sender.py:send():378] send: files
+2024-04-09 17:46:20,707 INFO    SenderThread:5976 [sender.py:_save_file():1365] saving file wandb-metadata.json with policy now
+2024-04-09 17:46:21,040 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: python_packages
+2024-04-09 17:46:21,040 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: python_packages
+2024-04-09 17:46:21,042 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 17:46:21,044 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 17:46:21,044 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 17:46:21,253 INFO    wandb-upload_0:5976 [upload_job.py:push():131] Uploaded file /tmp/tmpgeqbna76wandb/1but0pkz-wandb-metadata.json
+2024-04-09 17:46:21,273 DEBUG   SenderThread:5976 [sender.py:send():378] send: telemetry
+2024-04-09 17:46:21,279 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 17:46:21,706 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/requirements.txt
+2024-04-09 17:46:21,706 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log
+2024-04-09 17:46:23,709 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log
+2024-04-09 17:46:25,713 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log
+2024-04-09 17:46:26,413 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 17:46:31,720 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log
+2024-04-09 17:46:31,824 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 17:46:34,418 DEBUG   SenderThread:5976 [sender.py:send():378] send: exit
+2024-04-09 17:46:34,418 INFO    SenderThread:5976 [sender.py:send_exit():585] handling exit code: 0
+2024-04-09 17:46:34,419 INFO    SenderThread:5976 [sender.py:send_exit():587] handling runtime: 17
+2024-04-09 17:46:34,424 INFO    SenderThread:5976 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-04-09 17:46:34,424 INFO    SenderThread:5976 [sender.py:send_exit():593] send defer
+2024-04-09 17:46:34,425 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,425 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 0
+2024-04-09 17:46:34,425 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,425 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 0
+2024-04-09 17:46:34,425 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 1
+2024-04-09 17:46:34,425 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,426 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 1
+2024-04-09 17:46:34,426 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,426 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 1
+2024-04-09 17:46:34,426 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 2
+2024-04-09 17:46:34,426 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,427 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 2
+2024-04-09 17:46:34,427 INFO    HandlerThread:5976 [system_monitor.py:finish():203] Stopping system monitor
+2024-04-09 17:46:34,427 DEBUG   SystemMonitor:5976 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-04-09 17:46:34,427 INFO    HandlerThread:5976 [interfaces.py:finish():202] Joined cpu monitor
+2024-04-09 17:46:34,427 DEBUG   SystemMonitor:5976 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-04-09 17:46:34,428 INFO    HandlerThread:5976 [interfaces.py:finish():202] Joined disk monitor
+2024-04-09 17:46:34,428 DEBUG   SystemMonitor:5976 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-04-09 17:46:34,487 INFO    HandlerThread:5976 [interfaces.py:finish():202] Joined gpu monitor
+2024-04-09 17:46:34,488 INFO    HandlerThread:5976 [interfaces.py:finish():202] Joined memory monitor
+2024-04-09 17:46:34,488 INFO    HandlerThread:5976 [interfaces.py:finish():202] Joined network monitor
+2024-04-09 17:46:34,489 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,489 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 2
+2024-04-09 17:46:34,489 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 3
+2024-04-09 17:46:34,489 DEBUG   SenderThread:5976 [sender.py:send():378] send: stats
+2024-04-09 17:46:34,489 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,490 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 3
+2024-04-09 17:46:34,490 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,490 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 3
+2024-04-09 17:46:34,490 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 4
+2024-04-09 17:46:34,491 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,491 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 4
+2024-04-09 17:46:34,491 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,491 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 4
+2024-04-09 17:46:34,491 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 5
+2024-04-09 17:46:34,492 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,492 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 5
+2024-04-09 17:46:34,492 DEBUG   SenderThread:5976 [sender.py:send():378] send: summary
+2024-04-09 17:46:34,496 INFO    SenderThread:5976 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-04-09 17:46:34,497 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,497 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 5
+2024-04-09 17:46:34,497 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 6
+2024-04-09 17:46:34,497 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,497 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 6
+2024-04-09 17:46:34,497 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,497 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 6
+2024-04-09 17:46:34,502 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 17:46:34,685 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 7
+2024-04-09 17:46:34,685 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:34,685 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 7
+2024-04-09 17:46:34,686 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:34,686 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 7
+2024-04-09 17:46:34,722 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/config.yaml
+2024-04-09 17:46:34,723 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/wandb-summary.json
+2024-04-09 17:46:35,309 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 8
+2024-04-09 17:46:35,309 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:35,309 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 8
+2024-04-09 17:46:35,309 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:35,310 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 8
+2024-04-09 17:46:35,310 INFO    SenderThread:5976 [job_builder.py:build():298] Attempting to build job artifact
+2024-04-09 17:46:35,310 INFO    SenderThread:5976 [job_builder.py:_get_source_type():428] is repo sourced job
+2024-04-09 17:46:35,367 INFO    SenderThread:5976 [job_builder.py:build():404] adding wandb-job metadata file
+2024-04-09 17:46:35,383 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 9
+2024-04-09 17:46:35,384 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:35,384 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 9
+2024-04-09 17:46:35,384 DEBUG   SenderThread:5976 [sender.py:send():378] send: artifact
+2024-04-09 17:46:35,418 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 17:46:35,724 INFO    Thread-12 :5976 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log
+2024-04-09 17:46:36,121 INFO    SenderThread:5976 [sender.py:send_artifact():1443] sent artifact job-https___github.com_Leroieternel_openBHB-project.git_src_main_0322.py - {'id': 'QXJ0aWZhY3Q6Nzg5OTcxNDI0', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE2MDA3MDQzOA==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6Nzg5OTcxNDI0', 'versionIndex': 1}}}
+2024-04-09 17:46:36,121 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:36,121 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 9
+2024-04-09 17:46:36,122 INFO    SenderThread:5976 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-04-09 17:46:36,726 INFO    SenderThread:5976 [dir_watcher.py:finish():388] scan: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files
+2024-04-09 17:46:36,726 INFO    SenderThread:5976 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/config.yaml config.yaml
+2024-04-09 17:46:36,727 INFO    SenderThread:5976 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/conda-environment.yaml conda-environment.yaml
+2024-04-09 17:46:36,732 INFO    SenderThread:5976 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/wandb-metadata.json wandb-metadata.json
+2024-04-09 17:46:36,732 INFO    SenderThread:5976 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/requirements.txt requirements.txt
+2024-04-09 17:46:36,738 INFO    SenderThread:5976 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log output.log
+2024-04-09 17:46:36,743 INFO    SenderThread:5976 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/wandb-summary.json wandb-summary.json
+2024-04-09 17:46:36,749 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 10
+2024-04-09 17:46:36,749 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 17:46:36,750 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:36,750 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 10
+2024-04-09 17:46:36,755 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:36,755 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 10
+2024-04-09 17:46:36,755 INFO    SenderThread:5976 [file_pusher.py:finish():172] shutting down file pusher
+2024-04-09 17:46:37,095 INFO    wandb-upload_0:5976 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/config.yaml
+2024-04-09 17:46:37,148 INFO    wandb-upload_2:5976 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/requirements.txt
+2024-04-09 17:46:37,152 INFO    wandb-upload_1:5976 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/conda-environment.yaml
+2024-04-09 17:46:37,157 INFO    wandb-upload_3:5976 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/output.log
+2024-04-09 17:46:37,166 INFO    wandb-upload_4:5976 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/files/wandb-summary.json
+2024-04-09 17:46:37,366 INFO    Thread-11 :5976 [sender.py:transition_state():613] send defer: 11
+2024-04-09 17:46:37,367 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:37,367 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 11
+2024-04-09 17:46:37,368 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:37,368 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 11
+2024-04-09 17:46:37,368 INFO    SenderThread:5976 [file_pusher.py:join():178] waiting for file pusher
+2024-04-09 17:46:37,368 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 12
+2024-04-09 17:46:37,369 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:37,369 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 12
+2024-04-09 17:46:37,369 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:37,369 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 12
+2024-04-09 17:46:37,369 INFO    SenderThread:5976 [file_stream.py:finish():595] file stream finish called
+2024-04-09 17:46:37,420 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 17:46:37,518 INFO    SenderThread:5976 [file_stream.py:finish():599] file stream finish is done
+2024-04-09 17:46:37,518 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 13
+2024-04-09 17:46:37,518 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 17:46:37,518 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:37,519 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 13
+2024-04-09 17:46:37,519 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:37,519 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 13
+2024-04-09 17:46:37,520 INFO    SenderThread:5976 [sender.py:transition_state():613] send defer: 14
+2024-04-09 17:46:37,521 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 17:46:37,521 INFO    HandlerThread:5976 [handler.py:handle_request_defer():172] handle defer: 14
+2024-04-09 17:46:37,521 DEBUG   SenderThread:5976 [sender.py:send():378] send: final
+2024-04-09 17:46:37,521 DEBUG   SenderThread:5976 [sender.py:send():378] send: footer
+2024-04-09 17:46:37,522 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: defer
+2024-04-09 17:46:37,522 INFO    SenderThread:5976 [sender.py:send_request_defer():609] handle sender defer: 14
+2024-04-09 17:46:37,523 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 17:46:37,523 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 17:46:37,524 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 17:46:37,525 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 17:46:37,525 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: server_info
+2024-04-09 17:46:37,526 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: server_info
+2024-04-09 17:46:37,531 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: get_summary
+2024-04-09 17:46:37,531 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: sampled_history
+2024-04-09 17:46:37,532 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 17:46:37,532 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: job_info
+2024-04-09 17:46:37,674 DEBUG   SenderThread:5976 [sender.py:send_request():405] send_request: job_info
+2024-04-09 17:46:37,675 INFO    MainThread:5976 [wandb_run.py:_footer_history_summary_info():3851] rendering history
+2024-04-09 17:46:37,675 INFO    MainThread:5976 [wandb_run.py:_footer_history_summary_info():3883] rendering summary
+2024-04-09 17:46:37,675 INFO    MainThread:5976 [wandb_run.py:_footer_sync_info():3810] logging synced files
+2024-04-09 17:46:37,676 DEBUG   HandlerThread:5976 [handler.py:handle_request():146] handle_request: shutdown
+2024-04-09 17:46:37,676 INFO    HandlerThread:5976 [handler.py:finish():869] shutting down handler
+2024-04-09 17:46:38,533 INFO    WriterThread:5976 [datastore.py:close():296] close: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_174616-hwtvo0qy/run-hwtvo0qy.wandb
+2024-04-09 17:46:38,675 INFO    SenderThread:5976 [sender.py:finish():1521] shutting down sender
+2024-04-09 17:46:38,675 INFO    SenderThread:5976 [file_pusher.py:finish():172] shutting down file pusher
+2024-04-09 17:46:38,675 INFO    SenderThread:5976 [file_pusher.py:join():178] waiting for file pusher

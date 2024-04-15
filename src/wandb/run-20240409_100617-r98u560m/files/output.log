@@ -1,0 +1,44 @@
+wandb: WARNING No relevant files were detected in the specified directory. No code will be logged to your run.
+Traceback (most recent call last):
+  File "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py", line 310, in <module>
+    train(train_loader, model, optimizer, opts, epoch)
+  File "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py", line 165, in train
+    for idx, (images, label, _) in enumerate(train_loader):   # labels: torch.Size([6])
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 517, in __next__
+    data = self._next_data()
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 1199, in _next_data
+    return self._process_data(data)
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 1225, in _process_data
+    data.reraise()
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/_utils.py", line 429, in reraise
+    raise self.exc_type(msg)
+ValueError: Caught ValueError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/utils/data/_utils/worker.py", line 202, in _worker_loop
+    data = fetcher.fetch(index)
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 44, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 44, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/data/openbhb.py", line 82, in __getitem__
+    x = self.T(x)
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torchvision/transforms/transforms.py", line 60, in __call__
+    img = t(img)
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torchvision/transforms/transforms.py", line 97, in __call__
+    return F.to_tensor(pic)
+  File "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/lib/python3.8/site-packages/torchvision/transforms/functional.py", line 105, in to_tensor
+    raise ValueError('pic should be 2/3 dimensional. Got {} dimensions.'.format(pic.ndim))
+ValueError: pic should be 2/3 dimensional. Got 4 dimensions.
+run name:  unet_tfnone_lr0.0001_step_step10_rate0.9_temp0.1_wd5e-05_bsz4_views1_trainall_True_trial0
+Config: Namespace(alpha=1.0, amp=False, bs=4, clip_grad=False, data_dir='/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data', delta_reduction='sum', device='cuda', epochs=1, gradient_clipping=1.0, lr=0.0001, lr_decay='step', lr_decay_epochs=[], lr_decay_rate=0.9, lr_decay_step=10, model='unet', momentum=0.9, n_views=1, print_freq=10, save_dir='/home/jiaxia/brain-age-mri', save_freq=50, sps=8, temp=0.1, tf='none', train_all=True, trial=0, warm=False, weight_decay=5e-05)
+Model: UNet
+Optimizer: RMSprop (
+Parameter Group 0
+    alpha: 0.99
+    centered: False
+    eps: 1e-08
+    lr: 0.0001
+    momentum: 0.9
+    weight_decay: 5e-05
+)
+Scheduler: step

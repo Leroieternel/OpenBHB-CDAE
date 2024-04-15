@@ -17,7 +17,7 @@ def bin_age(age_real: torch.Tensor):
         age_binned[age_real <= value] = value
     return age_binned.long()
 
-def read_data(path, dataset, fast):
+def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal val: (362, 2)  external val: (395, 2)
     print(f"Read {dataset.upper()}")
     df = pd.read_csv(os.path.join(path, dataset + ".tsv"), sep="\t")
     # df = pd.read_csv(os.path.join(path, "test" + ".tsv"), sep="\t")
@@ -25,7 +25,7 @@ def read_data(path, dataset, fast):
 
     y_arr = df[["age", "site"]].values
 
-    x_arr = np.zeros((10, 3659572))
+    # x_arr = np.zeros((10, 3659572))
     if not fast:
         x_arr = np.load(os.path.join(path, dataset + ".npy"), mmap_mode="r")
     
@@ -34,7 +34,9 @@ def read_data(path, dataset, fast):
     return x_arr, y_arr
 
 class OpenBHB(torch.utils.data.Dataset):
-    def __init__(self, root, train=True, internal=True, transform=None, fast=False, load_feats=None):
+    # def __init__(self, root, train=True, internal=True, transform=None, fast=False, load_feats=None):
+    def __init__(self, root, train=True, internal=True, transform=None, fast=False):
+        print('###########################OpenBHB#########################')
         self.root = root
 
         if train and not internal:
@@ -56,24 +58,26 @@ class OpenBHB(torch.utils.data.Dataset):
         self.fast = fast
 
         self.bias_feats = None
-        if load_feats:
-            print("Loading biased features", load_feats)
-            self.bias_feats = torch.load(load_feats, map_location="cpu")
+        # if load_feats:
+        #     print("Loading biased features", load_feats)
+        #     self.bias_feats = torch.load(load_feats, map_location="cpu")
         
         print(f"Read {len(self.X)} records")      # total length of current reading samples
 
     def __len__(self):
         return len(self.y)
 
-    def __getitem__(self, index):   # not been called
+    def __getitem__(self, index):   
         print('************************ getitem ************************')
-        if not self.fast:
-            x = self.X[index]
-        else:
-            x = self.X[0]
+        # if not self.fast:
+        #     x = self.X[index]
+        # else:
+        #     x = self.X[0]
+        x = self.X[index]
 
         y = self.y[index]
 
+        print('openbhb-self.T: ',self.T)
         if self.T is not None:
             x = self.T(x)
         
@@ -128,6 +132,7 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
             the requested data: 'vbm', 'quasiraw', 'vbm_roi', 'desikan_roi',
             'destrieux_roi' or 'xhemi'.
         """
+        print("*****************************")
         if dtype not in self.MODALITIES:
             raise ValueError("Invalid input data type.")
         self.dtype = dtype
@@ -165,7 +170,7 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         if self.mock:
-            #print("transforming", X.shape)
+            print("transforming", X.shape)
             data = X.reshape(self.MODALITIES[self.dtype]["shape"])
             #print("mock data:", data.shape)
             return data
@@ -175,7 +180,7 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
         if self.dtype in ("vbm", "quasiraw"):
             im = unmask(select_X, self.masks[self.dtype])
             select_X = im.get_fdata()
-            select_X = select_X.transpose(2, 0, 1)
+            # select_X = select_X.transpose(2, 0, 1)
         select_X = select_X.reshape(self.MODALITIES[self.dtype]["shape"])
-        # print('transformed.shape', select_X.shape)
+        print('transformed.shape', select_X.shape)
         return select_X

@@ -1,0 +1,195 @@
+{
+    "os": "Linux-4.19.0-26-amd64-x86_64-with-glibc2.10",
+    "python": "3.8.5",
+    "heartbeatAt": "2024-04-09T15:52:21.669807",
+    "startedAt": "2024-04-09T15:52:21.020905",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--data_dir",
+        "/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data",
+        "--save_dir",
+        "/home/jiaxia/brain-age-mri",
+        "--model",
+        "unet",
+        "--epochs",
+        "30",
+        "--lr",
+        "1e-4",
+        "--lr_decay",
+        "step",
+        "--lr_decay_rate",
+        "0.9",
+        "--lr_decay_step",
+        "10",
+        "--momentum",
+        "0.9",
+        "--weight_decay",
+        "5e-5",
+        "--train_all",
+        "1",
+        "--trial",
+        "0",
+        "--tf",
+        "none"
+    ],
+    "state": "running",
+    "program": "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py",
+    "codePathLocal": "main_0322.py",
+    "codePath": "src/main_0322.py",
+    "git": {
+        "remote": "https://github.com/Leroieternel/openBHB-project.git",
+        "commit": "dd297748ceff7c2821ca8576b55ee5b5b0aa5554"
+    },
+    "email": "1816020611@qq.com",
+    "root": "/home/jiaxia/unet_test/contrastive-brain-age-prediction",
+    "host": "biwirender13",
+    "username": "jiaxia",
+    "executable": "/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/bin/python3",
+    "cpu_count": 24,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 1586.7869583333331,
+        "min": 1200.0,
+        "max": 3300.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1200.32,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1468.3,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3195.722,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.258,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3202.015,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1365.035,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.308,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.602,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.595,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.913,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.524,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.572,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 2500.647,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 2238.016,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1729.908,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.357,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.382,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.562,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.388,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1201.283,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3174.15,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.815,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.416,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1200.799,
+            "min": 1200.0,
+            "max": 3300.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 36.367408752441406,
+            "used": 13.047584533691406
+        }
+    },
+    "gpu": "NVIDIA TITAN Xp",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA TITAN Xp",
+            "memory_total": 12788498432
+        }
+    ],
+    "memory": {
+        "total": 503.794979095459
+    }
+}

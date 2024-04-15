@@ -1,0 +1,650 @@
+2024-04-09 09:31:00,603 INFO    StreamThr :24790 [internal.py:wandb_internal():86] W&B internal server running at pid: 24790, started at: 2024-04-09 09:31:00.601720
+2024-04-09 09:31:00,608 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status
+2024-04-09 09:31:00,610 INFO    WriterThread:24790 [datastore.py:open_for_write():87] open: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/run-ngttquwb.wandb
+2024-04-09 09:31:00,612 DEBUG   SenderThread:24790 [sender.py:send():378] send: header
+2024-04-09 09:31:00,672 DEBUG   SenderThread:24790 [sender.py:send():378] send: run
+2024-04-09 09:31:01,035 INFO    SenderThread:24790 [dir_watcher.py:__init__():211] watching files in: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files
+2024-04-09 09:31:01,036 INFO    SenderThread:24790 [sender.py:_start_run_threads():1099] run started: ngttquwb with start time 1712647860.602943
+2024-04-09 09:31:01,047 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: check_version
+2024-04-09 09:31:01,048 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: check_version
+2024-04-09 09:31:01,158 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: run_start
+2024-04-09 09:31:01,166 DEBUG   HandlerThread:24790 [system_info.py:__init__():26] System info init
+2024-04-09 09:31:01,166 DEBUG   HandlerThread:24790 [system_info.py:__init__():41] System info init done
+2024-04-09 09:31:01,166 INFO    HandlerThread:24790 [system_monitor.py:start():194] Starting system monitor
+2024-04-09 09:31:01,166 INFO    SystemMonitor:24790 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-04-09 09:31:01,167 INFO    HandlerThread:24790 [system_monitor.py:probe():214] Collecting system info
+2024-04-09 09:31:01,168 INFO    SystemMonitor:24790 [interfaces.py:start():190] Started cpu monitoring
+2024-04-09 09:31:01,168 INFO    SystemMonitor:24790 [interfaces.py:start():190] Started disk monitoring
+2024-04-09 09:31:01,169 INFO    SystemMonitor:24790 [interfaces.py:start():190] Started gpu monitoring
+2024-04-09 09:31:01,170 INFO    SystemMonitor:24790 [interfaces.py:start():190] Started memory monitoring
+2024-04-09 09:31:01,171 INFO    SystemMonitor:24790 [interfaces.py:start():190] Started network monitoring
+2024-04-09 09:31:01,208 DEBUG   HandlerThread:24790 [system_info.py:probe():150] Probing system
+2024-04-09 09:31:01,216 DEBUG   HandlerThread:24790 [system_info.py:_probe_git():135] Probing git
+2024-04-09 09:31:01,235 DEBUG   HandlerThread:24790 [system_info.py:_probe_git():143] Probing git done
+2024-04-09 09:31:01,235 DEBUG   HandlerThread:24790 [system_info.py:probe():198] Probing system done
+2024-04-09 09:31:01,235 DEBUG   HandlerThread:24790 [system_monitor.py:probe():223] {'os': 'Linux-4.19.0-26-amd64-x86_64-with-glibc2.10', 'python': '3.8.5', 'heartbeatAt': '2024-04-09T07:31:01.208283', 'startedAt': '2024-04-09T07:31:00.172003', 'docker': None, 'cuda': None, 'args': ('--data_dir', '/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data', '--save_dir', '/home/jiaxia/brain-age-mri', '--model', 'unet', '--epochs', '1', '--lr', '1e-4', '--lr_decay', 'step', '--lr_decay_rate', '0.9', '--lr_decay_step', '10', '--momentum', '0.9', '--weight_decay', '5e-5', '--train_all', '1', '--trial', '0', '--tf', 'none'), 'state': 'running', 'program': '/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py', 'codePathLocal': 'main_0322.py', 'codePath': 'src/main_0322.py', 'git': {'remote': 'https://github.com/Leroieternel/openBHB-project.git', 'commit': 'dd297748ceff7c2821ca8576b55ee5b5b0aa5554'}, 'email': '1816020611@qq.com', 'root': '/home/jiaxia/unet_test/contrastive-brain-age-prediction', 'host': 'biwirender15', 'username': 'jiaxia', 'executable': '/scratch_net/murgul/jiaxia/conda_envs/jiaxia-118-2/bin/python3', 'cpu_count': 28, 'cpu_count_logical': 28, 'cpu_freq': {'current': 1696.9428214285713, 'min': 1200.0, 'max': 3300.0}, 'cpu_freq_per_core': [{'current': 1704.465, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.459, 'min': 1200.0, 'max': 3300.0}, {'current': 2045.997, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.117, 'min': 1200.0, 'max': 3300.0}, {'current': 3051.298, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.202, 'min': 1200.0, 'max': 3300.0}, {'current': 1707.02, 'min': 1200.0, 'max': 3300.0}, {'current': 2084.574, 'min': 1200.0, 'max': 3300.0}, {'current': 2078.877, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.721, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.61, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.319, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.025, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.023, 'min': 1200.0, 'max': 3300.0}, {'current': 2985.019, 'min': 1200.0, 'max': 3300.0}, {'current': 1700.728, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.096, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.411, 'min': 1200.0, 'max': 3300.0}, {'current': 1999.879, 'min': 1200.0, 'max': 3300.0}, {'current': 2984.289, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.25, 'min': 1200.0, 'max': 3300.0}, {'current': 2984.128, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.363, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.218, 'min': 1200.0, 'max': 3300.0}, {'current': 2983.537, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.241, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.322, 'min': 1200.0, 'max': 3300.0}, {'current': 1200.211, 'min': 1200.0, 'max': 3300.0}], 'disk': {'/': {'total': 36.492637634277344, 'used': 10.529346466064453}}, 'gpu': 'NVIDIA TITAN Xp', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA TITAN Xp', 'memory_total': 12788498432}], 'memory': {'total': 503.79432678222656}}
+2024-04-09 09:31:01,235 INFO    HandlerThread:24790 [system_monitor.py:probe():224] Finished collecting system info
+2024-04-09 09:31:01,236 INFO    HandlerThread:24790 [system_monitor.py:probe():227] Publishing system info
+2024-04-09 09:31:01,236 DEBUG   HandlerThread:24790 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-04-09 09:31:02,041 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/conda-environment.yaml
+2024-04-09 09:31:05,161 DEBUG   HandlerThread:24790 [system_info.py:_save_conda():219] Saving conda packages done
+2024-04-09 09:31:05,166 INFO    HandlerThread:24790 [system_monitor.py:probe():229] Finished publishing system info
+2024-04-09 09:31:05,186 DEBUG   SenderThread:24790 [sender.py:send():378] send: files
+2024-04-09 09:31:05,187 INFO    SenderThread:24790 [sender.py:_save_file():1365] saving file wandb-metadata.json with policy now
+2024-04-09 09:31:05,544 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: python_packages
+2024-04-09 09:31:05,545 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: python_packages
+2024-04-09 09:31:05,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:31:05,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:31:05,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:31:05,713 INFO    wandb-upload_0:24790 [upload_job.py:push():131] Uploaded file /tmp/tmpugtkogh_wandb/u8t0az5c-wandb-metadata.json
+2024-04-09 09:31:05,759 DEBUG   SenderThread:24790 [sender.py:send():378] send: telemetry
+2024-04-09 09:31:05,759 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:06,040 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/conda-environment.yaml
+2024-04-09 09:31:06,041 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/requirements.txt
+2024-04-09 09:31:06,041 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:06,041 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/wandb-metadata.json
+2024-04-09 09:31:08,044 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:10,145 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:10,940 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:15,963 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:16,248 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:18,251 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:20,253 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:20,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:31:20,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:31:20,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:31:21,044 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:22,314 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:24,318 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:26,060 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:26,321 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:28,325 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:30,328 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:31,070 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:31,329 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/config.yaml
+2024-04-09 09:31:32,331 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:34,334 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:35,545 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:31:35,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:31:35,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:31:36,341 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:36,574 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:38,344 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:40,452 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:41,876 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:42,457 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:44,460 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:46,463 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:47,236 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:48,477 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:50,480 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:50,545 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:31:50,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:31:50,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:31:52,484 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:52,804 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:54,487 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:56,587 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:31:57,819 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:31:58,590 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:00,594 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:01,172 DEBUG   SystemMonitor:24790 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-04-09 09:32:01,173 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:32:02,697 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:02,909 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:04,700 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:05,547 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:32:05,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:32:05,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:32:06,800 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:08,468 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:08,803 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:10,824 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:12,981 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:13,474 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:14,097 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:16,101 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:18,104 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:18,774 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:20,148 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:20,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:32:20,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:32:20,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:32:22,151 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:24,136 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:24,242 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:26,245 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:28,248 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:29,516 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:30,250 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:31,174 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:32:32,253 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:34,256 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:34,900 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:35,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:32:35,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:32:35,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:32:36,259 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:38,265 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:40,121 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:40,270 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:42,273 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:44,276 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:45,140 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:46,317 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:48,320 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:50,323 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:50,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:32:50,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:32:50,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:32:50,720 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:52,326 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:54,436 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:55,881 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:32:56,439 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:32:58,440 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:00,444 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:01,034 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:01,175 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:33:02,447 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:04,450 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:05,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:33:05,547 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:33:05,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:33:06,360 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:06,454 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:08,459 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:10,462 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:11,622 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:12,465 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:14,470 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:16,472 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:16,625 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:18,476 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:20,479 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:20,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:33:20,546 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:33:20,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:33:22,024 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:22,482 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:24,486 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:26,700 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:27,030 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:28,703 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:30,708 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:31,176 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:33:32,152 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:32,711 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:34,714 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:35,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:33:35,547 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:33:35,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:33:36,718 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:37,163 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:38,721 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:40,723 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:42,535 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:42,730 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:44,733 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:46,741 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:47,647 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:48,745 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:50,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:33:50,547 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:33:50,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:33:50,751 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:52,728 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:52,754 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:54,916 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:56,919 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:33:57,733 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:33:58,922 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:00,925 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:01,177 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:34:02,933 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:03,026 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:04,935 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:05,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:34:05,547 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:34:05,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:34:06,941 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:08,404 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:08,944 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:10,947 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:12,950 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:13,593 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:14,956 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:16,958 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:18,608 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:18,962 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:20,547 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:34:20,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:34:20,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:34:20,966 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:22,968 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:24,080 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:24,971 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:26,974 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:28,977 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:29,532 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:30,980 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:31,178 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:34:32,983 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:34,964 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:34,986 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:35,547 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:34:35,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:34:35,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:34:36,992 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:38,996 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:40,036 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:40,998 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:43,001 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:45,008 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:45,456 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:47,109 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:49,115 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:50,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:34:50,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:50,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:34:50,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:34:51,118 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:53,121 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:55,126 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:55,924 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:34:57,130 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:34:59,133 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:01,136 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:01,179 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:35:01,180 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:03,236 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:05,239 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:05,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:35:05,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:35:05,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:35:06,296 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:07,241 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:09,245 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:11,248 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:11,424 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:13,252 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:15,256 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:16,429 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:17,258 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:19,413 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:20,417 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:20,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:35:20,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:35:20,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:35:21,466 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:22,420 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:24,423 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:26,483 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:26,750 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:28,486 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:30,489 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:31,180 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:35:32,268 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:32,492 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:34,498 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:35,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:35:35,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:35:35,553 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:35:36,516 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:37,579 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:38,519 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:40,611 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:42,614 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:42,952 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:44,624 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:46,627 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:47,984 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:48,632 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:50,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:35:50,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:35:50,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:35:50,698 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:52,701 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:52,988 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:54,704 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:56,762 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:35:58,151 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:35:58,825 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:00,828 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:01,181 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:36:02,936 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:03,511 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:04,940 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:05,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:36:05,548 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:36:05,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:36:06,943 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:08,946 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:08,960 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:10,951 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:12,952 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:14,022 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:14,989 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:17,092 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:19,193 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:19,436 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:20,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:36:20,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:36:20,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:36:21,197 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:23,200 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:24,676 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:25,208 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:27,324 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:29,329 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:30,193 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:31,182 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:36:31,332 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:33,335 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:35,346 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:35,481 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:35,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:36:35,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:36:35,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:36:37,352 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:39,355 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:40,738 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:41,358 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:43,361 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:45,461 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:46,092 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:47,463 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:49,467 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:50,548 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:36:50,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:36:50,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:36:51,369 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:51,469 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:53,510 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:55,523 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:56,525 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:36:56,614 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:36:58,530 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:00,537 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:01,183 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:37:01,804 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:02,540 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:04,546 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:05,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:37:05,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:37:05,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:37:06,651 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:07,020 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:08,680 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:10,684 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:12,466 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:12,687 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:14,691 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:16,734 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:17,468 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:18,758 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:20,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:37:20,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:37:20,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:37:20,792 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:22,710 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:22,803 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:24,808 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:26,812 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:27,718 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:28,826 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:30,942 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:31,184 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:37:32,947 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:33,099 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:34,956 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:35,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:37:35,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:37:35,595 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:37:36,959 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:38,510 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:38,962 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:40,965 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:42,971 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:43,959 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:44,975 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:47,105 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:49,110 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:49,302 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:50,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:37:50,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:37:50,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:37:51,279 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:53,349 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:54,700 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:37:55,351 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:57,353 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:59,358 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:37:59,824 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:01,185 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:38:01,414 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:03,422 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:04,827 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:05,426 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:05,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:38:05,550 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:38:05,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:38:07,432 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:09,436 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:10,273 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:11,439 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:13,443 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:15,446 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:15,546 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:17,502 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:19,506 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:20,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:20,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:38:20,550 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:38:20,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:38:21,614 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:23,686 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:25,713 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:25,855 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:27,718 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:31,012 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:31,188 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:38:33,724 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:35,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:38:35,549 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:38:35,554 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:38:35,738 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:36,205 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:37,742 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:39,744 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:41,748 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:41,915 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:43,751 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:45,786 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:46,845 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:46,993 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:48,849 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:50,549 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:38:50,550 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:38:50,555 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:38:50,852 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:52,052 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:52,857 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:54,859 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:56,871 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:38:57,348 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:38:58,875 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:00,878 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:01,192 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:39:02,844 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:02,883 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:04,887 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:05,550 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:39:05,550 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:39:05,555 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:39:06,890 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:08,310 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:08,893 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:10,896 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:12,910 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:13,317 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:14,913 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:16,916 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:18,619 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:18,920 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:20,550 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: stop_status
+2024-04-09 09:39:20,550 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: stop_status
+2024-04-09 09:39:20,555 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:39:20,923 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:22,927 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:23,712 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:24,932 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:26,934 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:28,803 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:29,099 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:31,104 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:31,195 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:39:33,847 DEBUG   SenderThread:24790 [sender.py:send():378] send: exit
+2024-04-09 09:39:33,848 INFO    SenderThread:24790 [sender.py:send_exit():585] handling exit code: 0
+2024-04-09 09:39:33,848 INFO    SenderThread:24790 [sender.py:send_exit():587] handling runtime: 512
+2024-04-09 09:39:33,851 INFO    SenderThread:24790 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-04-09 09:39:33,852 INFO    SenderThread:24790 [sender.py:send_exit():593] send defer
+2024-04-09 09:39:33,852 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,853 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 0
+2024-04-09 09:39:33,853 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:33,853 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,854 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 0
+2024-04-09 09:39:33,854 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 1
+2024-04-09 09:39:33,854 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,854 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 1
+2024-04-09 09:39:33,855 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,855 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 1
+2024-04-09 09:39:33,855 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 2
+2024-04-09 09:39:33,855 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,855 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 2
+2024-04-09 09:39:33,855 INFO    HandlerThread:24790 [system_monitor.py:finish():203] Stopping system monitor
+2024-04-09 09:39:33,855 DEBUG   SystemMonitor:24790 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-04-09 09:39:33,856 INFO    HandlerThread:24790 [interfaces.py:finish():202] Joined cpu monitor
+2024-04-09 09:39:33,856 DEBUG   SystemMonitor:24790 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-04-09 09:39:33,857 INFO    HandlerThread:24790 [interfaces.py:finish():202] Joined disk monitor
+2024-04-09 09:39:33,961 INFO    HandlerThread:24790 [interfaces.py:finish():202] Joined gpu monitor
+2024-04-09 09:39:33,961 INFO    HandlerThread:24790 [interfaces.py:finish():202] Joined memory monitor
+2024-04-09 09:39:33,962 INFO    HandlerThread:24790 [interfaces.py:finish():202] Joined network monitor
+2024-04-09 09:39:33,963 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,963 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 2
+2024-04-09 09:39:33,963 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 3
+2024-04-09 09:39:33,963 DEBUG   SenderThread:24790 [sender.py:send():378] send: stats
+2024-04-09 09:39:33,963 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,964 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 3
+2024-04-09 09:39:33,965 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,965 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 3
+2024-04-09 09:39:33,965 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 4
+2024-04-09 09:39:33,965 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,965 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 4
+2024-04-09 09:39:33,966 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,966 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 4
+2024-04-09 09:39:33,966 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 5
+2024-04-09 09:39:33,966 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,966 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 5
+2024-04-09 09:39:33,967 DEBUG   SenderThread:24790 [sender.py:send():378] send: summary
+2024-04-09 09:39:33,970 INFO    SenderThread:24790 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-04-09 09:39:33,970 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,970 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 5
+2024-04-09 09:39:33,970 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 6
+2024-04-09 09:39:33,970 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,971 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 6
+2024-04-09 09:39:33,971 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,971 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 6
+2024-04-09 09:39:33,971 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 7
+2024-04-09 09:39:33,971 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: status_report
+2024-04-09 09:39:33,972 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:33,972 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 7
+2024-04-09 09:39:33,972 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:33,972 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 7
+2024-04-09 09:39:34,106 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/wandb-summary.json
+2024-04-09 09:39:34,847 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 09:39:34,877 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 8
+2024-04-09 09:39:34,878 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 09:39:34,878 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:34,878 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 8
+2024-04-09 09:39:34,879 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:34,879 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 8
+2024-04-09 09:39:34,879 INFO    SenderThread:24790 [job_builder.py:build():298] Attempting to build job artifact
+2024-04-09 09:39:34,882 INFO    SenderThread:24790 [job_builder.py:_get_source_type():428] is repo sourced job
+2024-04-09 09:39:34,969 INFO    SenderThread:24790 [job_builder.py:build():404] adding wandb-job metadata file
+2024-04-09 09:39:34,986 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 9
+2024-04-09 09:39:34,987 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:34,987 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 9
+2024-04-09 09:39:34,987 DEBUG   SenderThread:24790 [sender.py:send():378] send: artifact
+2024-04-09 09:39:35,108 INFO    Thread-12 :24790 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:35,756 INFO    SenderThread:24790 [sender.py:send_artifact():1443] sent artifact job-https___github.com_Leroieternel_openBHB-project.git_src_main_0322.py - {'id': 'QXJ0aWZhY3Q6Nzg5OTcxNDI0', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE2MDA3MDQzOA==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6Nzg5OTcxNDI0', 'versionIndex': 1}}}
+2024-04-09 09:39:35,756 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:35,756 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 9
+2024-04-09 09:39:35,756 INFO    SenderThread:24790 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-04-09 09:39:35,849 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 09:39:36,110 INFO    SenderThread:24790 [dir_watcher.py:finish():388] scan: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files
+2024-04-09 09:39:36,111 INFO    SenderThread:24790 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/config.yaml config.yaml
+2024-04-09 09:39:36,111 INFO    SenderThread:24790 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/conda-environment.yaml conda-environment.yaml
+2024-04-09 09:39:36,117 INFO    SenderThread:24790 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/wandb-metadata.json wandb-metadata.json
+2024-04-09 09:39:36,117 INFO    SenderThread:24790 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/requirements.txt requirements.txt
+2024-04-09 09:39:36,123 INFO    SenderThread:24790 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log output.log
+2024-04-09 09:39:36,129 INFO    SenderThread:24790 [dir_watcher.py:finish():402] scan save: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/wandb-summary.json wandb-summary.json
+2024-04-09 09:39:36,134 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 10
+2024-04-09 09:39:36,136 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 09:39:36,136 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:36,139 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 10
+2024-04-09 09:39:36,140 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:36,140 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 10
+2024-04-09 09:39:36,140 INFO    SenderThread:24790 [file_pusher.py:finish():172] shutting down file pusher
+2024-04-09 09:39:36,520 INFO    wandb-upload_0:24790 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/config.yaml
+2024-04-09 09:39:36,567 INFO    wandb-upload_4:24790 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/wandb-summary.json
+2024-04-09 09:39:36,574 INFO    wandb-upload_2:24790 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/requirements.txt
+2024-04-09 09:39:36,580 INFO    wandb-upload_1:24790 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/conda-environment.yaml
+2024-04-09 09:39:36,850 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 09:39:36,851 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 09:39:37,115 INFO    wandb-upload_3:24790 [upload_job.py:push():131] Uploaded file /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/files/output.log
+2024-04-09 09:39:37,316 INFO    Thread-11 :24790 [sender.py:transition_state():613] send defer: 11
+2024-04-09 09:39:37,316 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:37,317 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 11
+2024-04-09 09:39:37,317 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:37,317 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 11
+2024-04-09 09:39:37,317 INFO    SenderThread:24790 [file_pusher.py:join():178] waiting for file pusher
+2024-04-09 09:39:37,318 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 12
+2024-04-09 09:39:37,318 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:37,318 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 12
+2024-04-09 09:39:37,319 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:37,319 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 12
+2024-04-09 09:39:37,319 INFO    SenderThread:24790 [file_stream.py:finish():595] file stream finish called
+2024-04-09 09:39:37,774 INFO    SenderThread:24790 [file_stream.py:finish():599] file stream finish is done
+2024-04-09 09:39:37,774 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 13
+2024-04-09 09:39:37,775 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:37,775 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 13
+2024-04-09 09:39:37,776 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:37,776 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 13
+2024-04-09 09:39:37,776 INFO    SenderThread:24790 [sender.py:transition_state():613] send defer: 14
+2024-04-09 09:39:37,777 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: defer
+2024-04-09 09:39:37,777 INFO    HandlerThread:24790 [handler.py:handle_request_defer():172] handle defer: 14
+2024-04-09 09:39:37,777 DEBUG   SenderThread:24790 [sender.py:send():378] send: final
+2024-04-09 09:39:37,778 DEBUG   SenderThread:24790 [sender.py:send():378] send: footer
+2024-04-09 09:39:37,778 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: defer
+2024-04-09 09:39:37,778 INFO    SenderThread:24790 [sender.py:send_request_defer():609] handle sender defer: 14
+2024-04-09 09:39:37,779 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 09:39:37,780 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 09:39:37,780 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: poll_exit
+2024-04-09 09:39:37,781 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: poll_exit
+2024-04-09 09:39:37,782 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: server_info
+2024-04-09 09:39:37,782 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: server_info
+2024-04-09 09:39:37,788 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: get_summary
+2024-04-09 09:39:37,788 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: sampled_history
+2024-04-09 09:39:37,789 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: internal_messages
+2024-04-09 09:39:37,789 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: job_info
+2024-04-09 09:39:37,922 DEBUG   SenderThread:24790 [sender.py:send_request():405] send_request: job_info
+2024-04-09 09:39:37,923 INFO    MainThread:24790 [wandb_run.py:_footer_history_summary_info():3851] rendering history
+2024-04-09 09:39:37,923 INFO    MainThread:24790 [wandb_run.py:_footer_history_summary_info():3883] rendering summary
+2024-04-09 09:39:37,923 INFO    MainThread:24790 [wandb_run.py:_footer_sync_info():3810] logging synced files
+2024-04-09 09:39:37,924 DEBUG   HandlerThread:24790 [handler.py:handle_request():146] handle_request: shutdown
+2024-04-09 09:39:37,925 INFO    HandlerThread:24790 [handler.py:finish():869] shutting down handler
+2024-04-09 09:39:38,790 INFO    WriterThread:24790 [datastore.py:close():296] close: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/wandb/run-20240409_093100-ngttquwb/run-ngttquwb.wandb
+2024-04-09 09:39:38,923 INFO    SenderThread:24790 [sender.py:finish():1521] shutting down sender
+2024-04-09 09:39:38,923 INFO    SenderThread:24790 [file_pusher.py:finish():172] shutting down file pusher
+2024-04-09 09:39:38,923 INFO    SenderThread:24790 [file_pusher.py:join():178] waiting for file pusher

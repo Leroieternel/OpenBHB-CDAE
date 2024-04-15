@@ -95,8 +95,10 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
         self.stop = cumsum[index]
         self.masks = dict((key, val["path"])
                           for key, val in self.MASKS.items())
-        self.masks["vbm"] = os.environ.get("VBM_MASK")
-        self.masks["quasiraw"] = os.environ.get("QUASIRAW_MASK")
+        # self.masks["vbm"] = os.environ.get("VBM_MASK")
+        # self.masks["quasiraw"] = os.environ.get("QUASIRAW_MASK")
+        self.masks["vbm"] = "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/data/masks/cat12vbm_space-MNI152_desc-gm_TPM.nii.gz"
+        self.masks["quasiraw"] = "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/data/masks/quasiraw_space-MNI152_desc-brain_T1w.nii.gz"
         for key in self.masks:
             print(self.masks[key])
             if self.masks[key] is None or not os.path.isfile(self.masks[key]):

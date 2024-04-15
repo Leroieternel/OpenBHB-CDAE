@@ -110,11 +110,22 @@ class UNet(nn.Module):
         x3 = self.down2(x2)
         x4 = self.down3(x3)
         x5 = self.down4(x4)
+        print('x shape: ', x.shape)
+        print('x1 shape: ', x1.shape)
+        print('x2 shape: ', x2.shape)
+        print('x3 shape: ', x3.shape)
+        print('x4 shape: ', x4.shape)
+        print('x5 shape: ', x5.shape)
         x = self.up1(x5, x4)
+        print('up1 shape: ', x.shape)
         x = self.up2(x, x3)
+        print('up2 shape: ', x.shape)
         x = self.up3(x, x2)
+        print('up3 shape: ', x.shape)
         x = self.up4(x, x1)
+        print('up4 shape: ', x.shape)
         logits = self.outc(x)
+        print('out shape: ', logits.shape)
         return logits
 
     def use_checkpointing(self):

@@ -4,42 +4,60 @@ import torch
 import os
 import models
 import matplotlib.pyplot as plt
+# from PIL import Image
 
 if __name__ == "__main__":
-    # 选择设备，有cuda用cuda，没有就用cpu
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    # 加载网络，图片单通道，分类为1。
+    # load the network, single channel, 1 class
     net = models.UNet(n_channels=1, n_classes=1)
     optimizer = torch.optim.RMSprop(net.parameters())
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
 
-    # 将网络拷贝到deivce中
+    # cpy unet to device
     net.to(device=device)
-    # 加载模型参数
-    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/unet_30_1am_0325.pth', map_location=device)
+    # load model parameters
+    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/unet_50_0134_mse_bs4_0410.pth', map_location=device)
     net.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
 
-    # 测试模式
+    # test
     # net.eval()
+    np.set_printoptions(threshold=np.inf)
+
+
     test_img = np.load('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.npy')
-    print('test shape: ', test_img.shape)
+    plt.figure()
+    plt.imshow(test_img[0], cmap="gray")
+    # np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_pred.npy', input_numpy)
+    plt.savefig('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.jpg')
+    # image = Image.fromarray(test_img)
+    # image.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.jpg')
+    # train_sample = np.load('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/train_img_sample.npy')
+    # print('test shape: ', test_img)
     test_img = np.expand_dims(test_img, axis=0)
     print('test shape: ', test_img.shape)
     test_img = torch.from_numpy(test_img).to(device=device, dtype=torch.float32)
-        # 预测
+        # predict
     net.eval()
     pred = net(test_img)
     print(pred.shape)
     pred_numpy = pred.cpu().detach().numpy()
     pred_numpy = pred_numpy.reshape(182, 218)
 
-    print(pred_numpy)
-
-
-    # pred_numpy[pred_numpy >= 0.15] = 255
-    # pred_numpy[pred_numpy < 0.15] = 0
+    print(pred_numpy.shape)
+    # input_numpy = test_img.reshape(182, 218)
+    # np.set_printoptions(threshold=np.inf)
+    # print(pred_numpy)
+    # pred_numpy_crop = pred_numpy[20: 160, 20: 196]
+    # pred_numpy_crop = pred_numpy[2: 180, 2: 216]
+    # pred_numpy_crop = pred_numpy
+    # print(pred_numpy_crop.shape)
+    # pred_numpy[pred_numpy >= 66] = 255
+    # pred_numpy[pred_numpy < 66] = 0
     plt.figure()
     plt.imshow(pred_numpy, cmap="gray")
-    plt.savefig('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_mse.jpg')
+    # np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_pred.npy', input_numpy)
+    plt.savefig('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_mse_1_1.jpg')
+

@@ -1,8 +1,8 @@
-program: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py
+program: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_cdae.py
 data_dir: /usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data
 save_dir:  /home/jiaxia/brain-age-mri
 model: unet
-epochs: 30
+epochs: 1
 # batch_size: 6
 lr: 1e-4
 lr_decay: step

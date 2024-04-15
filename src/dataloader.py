@@ -41,6 +41,7 @@ dtype = "quasiraw"
 # all_X = FeatureExtractor(dtype=dtype).transform(X_train)
 temp_X = FeatureExtractor(dtype=dtype)   # temp x shape:  FeatureExtractor(dtype='quasiraw')
 # print('temp x shape: ', temp_X)
+print('X train shape: ', X_train.shape)
 batch_X = FeatureExtractor(dtype=dtype).transform(X_train[:BS])    # (10, 1, 182, 218, 182)
 # print('all X train shape: ', all_X.shape)    
 print("Shape of selected features:", batch_X.shape)   # (10, 1, 182, 218, 182): 10 subjects
@@ -65,15 +66,20 @@ print('one batch shape: ', X.shape)
 
 
 #%%
-print('one image shape: ', X[38][0].shape) 
+print('one image shape: ', X[44][0].shape) 
 
 plt.figure()
 
-plt.imshow(X[43][0], cmap="gray")
-x_test = np.expand_dims(X[43][0], axis=0)
+plt.imshow(X[44][0], cmap="gray")
+x_test = np.expand_dims(X[44][0], axis=0)
 print(x_test.shape)
-np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.npy', x_test)
+np.set_printoptions(threshold=np.inf)
+print(x_test)
 
+np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.npy', x_test)
+plt.figure()
+plt.imshow(x_test[0], cmap="gray")
+# plt.savefig('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img_original.jpg')
 
 
 # # %%
@@ -81,5 +87,35 @@ np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.np
 # print(mask_pred.shape)
 # plt.figure()
 # plt.imshow(mask_pred[2][0], cmap="gray")
+# %%
+
+np.set_printoptions(threshold=np.inf)
+train_sample = np.load('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/train_img_sample.npy')
+count = 0
+# print(train_sample)
+for i in range(182):
+      for j in range(218):
+            if train_sample[i][j] != 0:
+                  print(train_sample[i][j])
+                  count += 1
+print(count)
+# %%
+test_img = np.load('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_img.npy')
+trst_pred = np.load('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/test_pred.npy')
+count = 0
+for i in range(182):
+      for j in range(218):
+            if test_img[i][j] != 0:
+                  print(test_img[i][j])
+                  count += 1
+print(count)
+
+count_test = 0
+for i in range(182):
+      for j in range(218):
+            if trst_pred[i][j] != 0:
+                  print(trst_pred[i][j])
+                  count += 1
+print(count_test)
 # %%
 

@@ -1,0 +1,35 @@
+
+wandb: WARNING No relevant files were detected in the specified directory. No code will be logged to your run.
+run name:  unet_tfnone_lr0.0001_step_step10_rate0.9_temp0.1_wd5e-05_bsz4_views1_trainall_True_trial0
+Config: Namespace(alpha=1.0, amp=False, bs=4, clip_grad=False, data_dir='/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data', delta_reduction='sum', device='cuda', epochs=1, gradient_clipping=1.0, lr=0.0001, lr_decay='step', lr_decay_epochs=[], lr_decay_rate=0.9, lr_decay_step=10, model='unet', momentum=0.9, n_views=1, print_freq=10, save_dir='/home/jiaxia/brain-age-mri', save_freq=50, sps=8, temp=0.1, tf='none', train_all=True, trial=0, warm=False, weight_decay=5e-05)
+Model: UNet
+Optimizer: RMSprop (
+Parameter Group 0
+    alpha: 0.99
+    centered: False
+    eps: 1e-08
+    lr: 0.0001
+    momentum: 0.9
+    weight_decay: 5e-05
+)
+Scheduler: step
+one batch image shape:  torch.Size([4, 1, 182, 218, 182])
+single train image shape:  torch.Size([1, 182, 218, 182])
+[172  47 117  67 103   9  21  36]
+[ 87  70  88 140  58  39  87 174]
+[ 88  81 165  25  77  72   9 148]
+[115  79 175  82  99 177  29 147]
+[[0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ ...
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]]
+tensor(131.3910, device='cuda:0')
+Traceback (most recent call last):
+  File "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py", line 297, in <module>
+    train(train_loader, model, optimizer, opts, epoch)
+  File "/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/main_0322.py", line 213, in train
+    loss += criterion(masks_pred, true_masks.float())
+UnboundLocalError: local variable 'loss' referenced before assignment

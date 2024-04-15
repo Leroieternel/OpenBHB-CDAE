@@ -65,7 +65,7 @@ def parse_arguments():
     parser.add_argument('--temp', type=float, help='loss temperature', default=0.1)
     parser.add_argument('--alpha', type=float, help='infonce weight', default=1.)
     parser.add_argument('--n_views', type=int, help='num. of multiviews', default=1)
-    parser.add_argument('--bs', type=int, help='num. of subjects per batch', default=2)
+    parser.add_argument('--bs', type=int, help='num. of subjects per batch', default=4)
     parser.add_argument('--sps', type=int, help='Slices per subject', default=8)
 
     opts = parser.parse_args()
@@ -83,8 +83,8 @@ def parse_arguments():
 
 
 def get_transforms(opts):
-    selector = FeatureExtractor("quasiraw")
-    
+    selector = FeatureExtractor("quasiraw")   # selector: FeatureExtractor(dtype='quasiraw')
+
     if opts.tf == 'none':
         aug = transforms.Lambda(lambda x: x)
 
@@ -104,18 +104,21 @@ def get_transforms(opts):
             Pad((1, 128, 128, 128))
         ])
     
-    T_pre = transforms.Lambda(lambda x: selector.transform(x))
+    T_pre = transforms.Lambda(lambda x: selector.transform(x))    # T_pre: lambda object
+    
     T_train = transforms.Compose([
         T_pre,
         aug,
         transforms.Lambda(lambda x: torch.from_numpy(x).float()),
-        transforms.Normalize(mean=0.0, std=1.0)
+        # transforms.Normalize(mean=0.0, std=1.0)
+        transforms.Lambda(lambda x: (x - x.mean()) / (x.std() + 1e-7))
     ])
 
     T_test = transforms.Compose([
         T_pre,
         transforms.Lambda(lambda x: torch.from_numpy(x).float()),
-        transforms.Normalize(mean=0.0, std=1.0)
+        # transforms.Normalize(mean=0.0, std=1.0)
+        transforms.Lambda(lambda x: (x - x.mean()) / (x.std() + 1e-7))
     ])
 
     return T_train, T_test
@@ -128,13 +131,15 @@ def load_data(opts):
 
     # train_dataset = OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train, label=opts.label,
     #                         load_feats=None)
-    train_dataset = OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train, load_feats=None)
-    print("Total dataset length:", len(train_dataset))    # 3227
+    train_dataset = OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train)
+    # print("Total dataset length:", len(train_dataset))    # 3227
 
+    # valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train)
+    # valext = OpenBHB(opts.data_dir, train=False, internal=False, transform=T_train)
 
-    valint_feats, valext_feats = None, None
-    valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train, load_feats=valint_feats)
-    valext = OpenBHB(opts.data_dir, train=False, internal=False, transform=T_train, load_feats=valext_feats)
+    # valint_feats, valext_feats = None, None
+    # valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train, load_feats=valint_feats)
+    # valext = OpenBHB(opts.data_dir, train=False, internal=False, transform=T_train, load_feats=valext_feats)
 
     # valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train,
     #                     label=opts.label, load_feats=valint_feats)
@@ -145,16 +150,17 @@ def load_data(opts):
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opts.bs, shuffle=True, num_workers=3,
                                                persistent_workers=True, drop_last=True)
-    train_loader_score = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train),
-                                                     batch_size=opts.bs, shuffle=True, num_workers=3,
-                                                     persistent_workers=True, drop_last=True)
+    # train_loader_score = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train),
+    #                                                  batch_size=opts.bs, shuffle=True, num_workers=3,
+    #                                                  persistent_workers=True, drop_last=True)
     test_internal = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=False, internal=True, transform=T_test), 
                                                 batch_size=opts.bs, shuffle=False, num_workers=3,
                                                 persistent_workers=True, drop_last=True)
     test_external = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=False, internal=False, transform=T_test), 
                                                 batch_size=opts.bs, shuffle=False, num_workers=3,
                                                 persistent_workers=True, drop_last=True)
-    return train_loader, train_loader_score, test_internal, test_external
+    # return train_loader, train_loader_score, test_internal, test_external
+    return train_loader, test_internal, test_external
 
 def load_model(opts):
     if 'resnet' in opts.model:
@@ -174,23 +180,23 @@ def load_model(opts):
     return model
 
 
-def train(train_loader, model, optimizer, opts, epoch):    
+def train(train_loader, model, optimizer, opts, epoch, train_loss):    
     '''
     load bs*sps slices per call
     '''
-
+    
     scaler = torch.cuda.amp.GradScaler() if opts.amp else None    # None
     model.train()
 
     t1 = time.time()
-    for idx, (images, labels, _) in enumerate(train_loader):   # labels: torch.Size([6])
+    for idx, (images, label, _) in enumerate(train_loader):   # labels: torch.Size([6])
         # if idx == 0: 
             # print('idx: ', idx)
-        print('image type: ', type(images))     # list
-        print('label shape from original dataloader: ', labels.shape)    # tensor([14.4000, 24.0000,  6.4700,  8.9973, 36.0000, 19.0000, 29.0000, 24.0000,
+        # print('image type: ', type(images))     # list
+        # print('label shape from original dataloader: ', labels.shape)    # tensor([14.4000, 24.0000,  6.4700,  8.9973, 36.0000, 19.0000, 29.0000, 24.0000,
                                # 26.2724, 23.0000], dtype=torch.float64)
             # print('len(images): ', len(images))   # 1
-            # print('single train image shape: ', images[0].shape)   # torch.Size([10, 1, 182, 218, 182])
+        print('single train image shape: ', images[0].shape)   # torch.Size([10, 1, 182, 218, 182])
             # print('single train labels shape: ', labels[0])     # tensor(14.4000, dtype=torch.float64)
         
 
@@ -217,7 +223,7 @@ def train(train_loader, model, optimizer, opts, epoch):
 
         # randomly choose opts.sps slices per subject: (one batch: 10 subjects, each pick 8 slices)
         indices = np.random.choice(182, size=opts.bs * opts.sps, replace=True)    # randomly pick 80 slices from images
-        print('selected indices: ', indices)
+        # print('selected indices: ', indices)
         X = []
         # y = []
         for i in range(opts.bs):   # 10 subjects
@@ -229,6 +235,9 @@ def train(train_loader, model, optimizer, opts, epoch):
 
         X = np.array(X)     # (6, 8, 1, 182, 218)
         X = X.reshape(opts.bs * opts.sps, *X.shape[2:])    # X: (80, 1, 182, 218)
+
+        print('transformed mean: ', X[24][0].mean())
+        np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/train_img_sample.npy', X[24][0])
         # print('label shape: ', len(y))   # bs
         # y = [val for val in y for i in range(opts.sps)]
         # y = np.array(y)  # (48,) 
@@ -250,17 +259,16 @@ def train(train_loader, model, optimizer, opts, epoch):
         warmup_learning_rate(opts, epoch, idx, len(train_loader), optimizer)
         # criterion = nn.BCEWithLogitsLoss()
         criterion = nn.MSELoss()
+        # train_loss = []
 
         # start training
         with tqdm(total=3227*182, desc=f'Epoch {epoch}/{opts.epochs}') as pbar:
             with torch.cuda.amp.autocast(scaler is not None):   # automatic mixed precision
                 masks_pred = model(torch_X)   # output dimension: torch.Size([48, 1, 182, 218])
-                print('masks shape: ', masks_pred.shape)    # torch.Size([bs*sps, 1, 182, 218])
+                # print('masks shape: ', masks_pred.shape)    # torch.Size([bs*sps, 1, 182, 218])
 
-
-                # loss = criterion(masks_pred.squeeze(1), true_masks.float())
                 loss = criterion(masks_pred.squeeze(1), true_masks.float().squeeze(1))
-                # loss += dice_loss(F.sigmoid(masks_pred.squeeze(1)), true_masks.float(), multiclass=False)
+                train_loss.append(loss.item())    
                 # loss += dice_loss(F.sigmoid(masks_pred.squeeze(1)), true_masks.float().squeeze(1), multiclass=False)
 
             
@@ -282,7 +290,8 @@ if __name__ == '__main__':
     
     set_seed(opts.trial)
 
-    train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
+    # train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
+    train_loader, test_loader_int, test_loader_ext = load_data(opts)
     model = load_model(opts)
     optimizer = torch.optim.RMSprop(model.parameters(), lr=opts.lr, weight_decay=opts.weight_decay, momentum=opts.momentum)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5)  # goal: maximize Dice score
@@ -326,22 +335,27 @@ if __name__ == '__main__':
     start_time = time.time()
     best_acc = 0.
 
-    
 
+    # training 
+    train_loss = []
     for epoch in range(1, opts.epochs + 1):
         adjust_learning_rate(opts, optimizer, epoch)
         # with tqdm(total=3227*182, desc=f'Epoch {epoch}/{opts.epochs}') as pbar:
 
             # train one batch
-        train(train_loader, model, optimizer, opts, epoch)
+        train(train_loader, model, optimizer, opts, epoch, train_loss)
 
+    print('train loss: ', train_loss)
+    train_loss_numpy = np.array(train_loss)
+    # np.save('/scratch_net/murgul/jiaxia/saved_models/unet_50_0134_mse_bs4_0410_loss.npy', train_loss_numpy)
+    
     checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
             }
-    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/unet_30_1am_0325.pth')
+    # torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/unet_50_0134_mse_bs4_0410.pth')
 
 
         # t2 = time.time()
