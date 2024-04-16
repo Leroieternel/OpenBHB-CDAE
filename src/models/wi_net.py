@@ -28,7 +28,7 @@ class Wi_Net(nn.Module):
 
             # fourth linear + sigmoid
             nn.Linear(128, output_dim),
-            nn.Sigmoid()
+            nn.Identity()
         )
 
     def forward(self, x):

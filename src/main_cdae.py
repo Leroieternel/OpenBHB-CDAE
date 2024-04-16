@@ -1,7 +1,6 @@
 import datetime
 import math
 import os
-from random import gauss
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -67,8 +66,8 @@ def parse_arguments():
     parser.add_argument('--temp', type=float, help='loss temperature', default=0.1)
     parser.add_argument('--alpha', type=float, help='infonce weight', default=1.)
     parser.add_argument('--n_views', type=int, help='num. of multiviews', default=1)
-    parser.add_argument('--bs', type=int, help='num. of subjects per batch', default=1)
-    parser.add_argument('--sps', type=int, help='Slices per subject', default=2)
+    parser.add_argument('--bs', type=int, help='num. of subjects per batch', default=4)
+    parser.add_argument('--sps', type=int, help='Slices per subject', default=8)
 
     opts = parser.parse_args()
 
@@ -166,7 +165,7 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
     load bs*sps slices per call
     '''
     
-    scaler = torch.cuda.amp.GradScaler() if opts.amp else None    # None
+    # scaler = torch.cuda.amp.GradScaler() if opts.amp else None    # None
     model.train()
 
     t1 = time.time()
@@ -175,6 +174,8 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
     TRAIN for each batch
     '''
     idx = 0
+    grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
+    
     for idx, (images, ages, sites) in enumerate(train_loader):   # labels: torch.Size([6])
         if idx == 1:
             break
@@ -214,7 +215,7 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
         # pack site ground truth labels a (one hot) for one batch
         y_site = []
         for i in range(opts.bs):   # opts.bs subjects
-            print(indices[i * opts.sps: (i+1) * opts.sps])
+            # print(indices[i * opts.sps: (i+1) * opts.sps])
             X.append(images_numpy[i, :, :, :, indices[i * opts.sps: (i+1) * opts.sps]]) 
             sample_a = np.zeros(64, dtype=np.float32)   # sample_a: one hot sit label
             sample_a[int(sites[i])] = 1.0
@@ -222,14 +223,16 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
 
 
         X = np.array(X)     # (6, 8, 1, 182, 218)
-        X = X.reshape(opts.bs * opts.sps, *X.shape[2:])    # X: (80, 1, 182, 218)
+        X = X.reshape(opts.bs * opts.sps, *X.shape[2:])    # X: (bs*sps, 1, 182, 218)
         y_site = [val for val in y_site for i in range(opts.sps)]
         print('y site length: ', len(y_site))
         y_site = np.array(y_site)
         torch_a = torch.from_numpy(y_site)       # a: true label (tensor) for one batch
         a = torch_a.to(opts.device)     # torch.Size([bs*sps])
-
+        np.save('/scratch_net/murgul/jiaxia/saved_models/test_image_0.npy', X[0])
         torch_X = torch.from_numpy(X).to(opts.device)     # torch.Size([bs*sps, 1, 182, 218])
+        std = torch_X.std(dim=[1, 2, 3], unbiased=False) 
+        print('std: ', std)
         true_masks = torch.from_numpy(X).to(opts.device) 
 
         warmup_learning_rate(opts, epoch, idx, len(train_loader), optimizer)
@@ -260,7 +263,7 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
 
         # start training
         # with tqdm(total=3227*182, desc=f'Epoch {epoch}/{opts.epochs}') as pbar:
-        with torch.cuda.amp.autocast(scaler is not None):   # automatic mixed precision
+        with torch.cuda.amp.autocast():   # automatic mixed precision
 
             '''
             masks_encoder_out: a^ + zi
@@ -302,7 +305,7 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
             print('forward ok')
 
             # define w_t and w_i
-            wt = nn.Sigmoid()
+            wt = nn.Identity()
             wt_zt = wt(a_hat)
             print('wt(zt) shape: ', wt_zt.shape)
 
@@ -327,18 +330,24 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
             bce_criterion = nn.BCEWithLogitsLoss(reduction='sum')
             
             recon_loss = recon_criterion(mask_recon, true_masks.float())
+            print('recon loss: ', recon_loss)
 
             exc_loss = bce_criterion(wt_zt, a)
             inh_loss = -bce_criterion(wi_zi, a)
+            print('exc loss: ', exc_loss)
+            print('inh loss: ', inh_loss)
 
             cycle_loss = recon_criterion(xi_a_hat, true_masks.float())
+            print('cycle loss: ', cycle_loss)
             latent_loss = recon_criterion(zi_hat, zi)
-            cc_loss = correlation_loss(xi_b_hat, torch_X)
+            print('latent loss: ', latent_loss)
+            cc_loss = correlation_loss(xi_b_hat, torch_X)    # torch.Size([32, 1, 182, 218]), torch.Size([bs*sps, 1, 182, 218])
+            print('cc loss: ', cc_loss)
 
             loss = 1.0 * recon_loss + 1.0 * exc_loss + 0.5 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.0 * cc_loss
             print('loss: ', loss)
             print('loss shape: ', loss.shape)
-            # train_loss.append(loss.item())  
+            train_loss.append(loss.item())  
             
             # print('cuda usage: ', torch.cuda.memory_allocated(device=opts.device))
             print('current cuda: ', torch.cuda.current_device())
@@ -351,10 +360,10 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss, params):
         # back propagation
 
         optimizer.zero_grad()
-        grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
+        
         grad_scaler.scale(loss).backward()
-        grad_scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
+        # grad_scaler.unscale_(optimizer)
+        # torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
         grad_scaler.step(optimizer)
         grad_scaler.update()
 
