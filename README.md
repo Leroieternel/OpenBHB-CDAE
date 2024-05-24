@@ -1,4 +1,6 @@
 For running vanilla unet (main_0322.py):
+```bash
+
   cd ../contrastive-brain-age-prediction/src
   python launcher.py exp/ae.yaml
 
