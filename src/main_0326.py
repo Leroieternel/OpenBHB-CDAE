@@ -20,7 +20,7 @@ from torchvision import datasets
 from util import AverageMeter, NViewTransform, ensure_dir, set_seed, arg2bool, save_model
 from util import warmup_learning_rate, adjust_learning_rate
 from util import compute_age_mae, compute_site_ba
-# from data import FeatureExtractor, OpenBHB, bin_age
+from data import FeatureExtractor, OpenBHB, bin_age
 from estimator import FeatureExtractor
 from data.transforms import Crop, Pad, Cutout
 from tqdm import tqdm

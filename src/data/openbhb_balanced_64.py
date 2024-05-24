@@ -28,12 +28,60 @@ def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal va
     # x_arr = np.zeros((10, 3659572))
     if not fast:
         x_arr = np.load(os.path.join(path, dataset + ".npy"), mmap_mode="r")
+
+    site_count = []
+
+    for i in range(0, 64):
+        site_count.append(df[df['site'] == i].shape[0])
+
+    # top_5_counts = sorted(site_count, reverse=True)[:5]   
+    # site_3 = sorted(site_count, reverse=True)[:1]
+
+    indexed_data = list(enumerate(site_count))
+    sorted_indexed_data = sorted(indexed_data, key=lambda x: x[1], reverse=True)
+    top_5_indices = [index for index, value in sorted_indexed_data[:5]]  
+    site_3_indices = [index for index, value in sorted_indexed_data[:1]]
+    print("Indices of top four elements:", top_5_indices)   # [3, 1, 10, 17, 24]
+    print("Indices of site 3 elements:", site_3_indices)    # [3]
+
+    # sites_top_rest = [1, 10, 17, 24]
+    arr = np.arange(64)
+    arr = np.delete(arr, 3)
+    sites_top_rest = arr.tolist()
+    
+    site_3 = [3]
+    indices_top_rest = df[df['site'].isin(sites_top_rest)]
+    indices_top1 = df[df['site'].isin(site_3)]
+    list_indices_top_rest = indices_top_rest.index.tolist()
+    list_indices_site3 = indices_top1.index.tolist()
+    selected_site3 = np.random.choice(list_indices_site3, size=200, replace=False)
+    print('filtered_indices_top2to5: ', len(list_indices_top_rest))
+    print('length of filtered_indices_top1: ', len(selected_site3))
+    print('filtered_indices_top1: ', selected_site3)
+
+    balanced_indices = selected_site3.tolist() + list_indices_top_rest
+    print('length of balanced indices: ', len(balanced_indices))
+    print('balanced indices: ', balanced_indices)
     
     print("- y size [original]:", y_arr.shape)
     print("- x size [original]:", x_arr.shape)
-    return x_arr, y_arr
 
-class OpenBHB(torch.utils.data.Dataset):
+    x_arr_balanced = x_arr[balanced_indices]
+    y_arr_balanced = y_arr[balanced_indices]
+
+    print("- x size [balanced]:", x_arr_balanced.shape)
+    print("- y size [balanced]:", y_arr_balanced.shape)
+
+    # y_arr_balanced_new = y_arr_balanced
+    # print('y_arr_balanced shape: ', y_arr_balanced_new.shape)
+    # mapping = {3: 0, 1: 1, 10: 2, 17: 3, 24: 4}
+
+    # y_arr_balanced_new[:, 1] = np.array([mapping[value] for value in y_arr_balanced[:, 1]])
+    # print('y_arr_balanced new: ', y_arr_balanced_new)
+
+    return x_arr_balanced, y_arr_balanced
+
+class OpenBHB_balanced_64(torch.utils.data.Dataset):
     # def __init__(self, root, train=True, internal=True, transform=None, fast=False, load_feats=None):
     def __init__(self, root, train=True, internal=True, transform=None, fast=False):
         print('###########################OpenBHB#########################')
@@ -89,7 +137,7 @@ class OpenBHB(torch.utils.data.Dataset):
         else:
             return x, age, site
 
-class FeatureExtractor(BaseEstimator, TransformerMixin):
+class FeatureExtractor_balanced(BaseEstimator, TransformerMixin):
     """ Select only the requested data associatedd features from the the
     input buffered data.
     """
@@ -180,5 +228,5 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
             select_X = im.get_fdata()
             # select_X = select_X.transpose(2, 0, 1)
         select_X = select_X.reshape(self.MODALITIES[self.dtype]["shape"])
-        # print('transformed.shape', select_X.shape)   # （1, 182,  218, 182）
+        print('transformed.shape', select_X.shape)
         return select_X

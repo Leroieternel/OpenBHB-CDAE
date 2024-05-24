@@ -2,8 +2,11 @@ import numpy as np
 import multiprocessing
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression, Ridge
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, cross_val_predict
 from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 class AgeEstimator(BaseEstimator):
     """ Define the age estimator on latent space network features.
@@ -44,4 +47,17 @@ class SiteEstimator(BaseEstimator):
         return self.site_estimator.predict(X)
 
     def score(self, X, y):
+        prediction = cross_val_predict(self.site_estimator.best_estimator_, X, y, cv=5)
+        print('prediction: ', prediction)
+        cm = confusion_matrix(y, prediction)
+        plt.figure(figsize=(12, 10))
+        sns.heatmap(cm, annot=True, fmt="d")
+        plt.xlabel('Predicted')
+        plt.ylabel('True')
+        # plt.show()
+        plt.savefig('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/confusion_matrix_1.jpg')
         return self.site_estimator.score(X, y)
+    
+    # def plot_confusion_matrix(self, X, y):
+    #     prediction = cross_val_predict(self.site_estimator.best_estimator_, X, y, cv=5)
+        

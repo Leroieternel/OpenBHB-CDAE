@@ -2,34 +2,39 @@ import torch
 import torch.nn as nn
 
 class Wi_Net(nn.Module):
-    def __init__(self, input_dim=448, output_dim=64, dropout_rate=0.5):
+    def __init__(self, input_dim=960, output_dim=64, dropout_rate=0.5):
 
         super(Wi_Net, self).__init__()
 
 
         self.layers = nn.Sequential(
             # first linear + BN + ReLU + Dropout
-            nn.Linear(input_dim, 300),
-            nn.BatchNorm1d(300),
-            nn.ReLU(),
+            nn.Linear(input_dim, 512),
+            nn.BatchNorm1d(512),
+            nn.LeakyReLU(),
             nn.Dropout(dropout_rate),
 
             # second linear+ BN + ReLU + Dropout
-            nn.Linear(300, 256),
+            nn.Linear(512, 256),
             nn.BatchNorm1d(256),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Dropout(dropout_rate),
 
             # third linear + BN + ReLU + Dropout
             nn.Linear(256, 128),
             nn.BatchNorm1d(128),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Dropout(dropout_rate),
 
             # fourth linear + sigmoid
             nn.Linear(128, output_dim),
             nn.Identity()
         )
+
+        for layer in self.layers:
+            if isinstance(layer, nn.Linear):
+                nn.init.kaiming_uniform_(layer.weight, mode='fan_in', nonlinearity='leaky_relu')
+                layer.bias.data.fill_(0)
 
     def forward(self, x):
         

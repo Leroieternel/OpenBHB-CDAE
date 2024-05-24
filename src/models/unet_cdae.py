@@ -98,7 +98,6 @@ class UNet(nn.Module):
         self.down3 = (Down(256, 512))
         factor = 2 if bilinear else 1
         self.down4 = (Down(512, 1024 // factor))
-
         self.up1 = (Up(1024, 512 // factor, bilinear))
         self.up2 = (Up(512, 256 // factor, bilinear))
         self.up3 = (Up(256, 128 // factor, bilinear))
@@ -111,23 +110,23 @@ class UNet(nn.Module):
         x3 = self.down2(x2)
         x4 = self.down3(x3)
         x5 = self.down4(x4)
-        # print('x shape: ', x.shape)      # x shape:  torch.Size([4, 1, 182, 218])
-        # print('x1 shape: ', x1.shape)    # x1 shape:  torch.Size([4, 64, 182, 218])
-        # print('x2 shape: ', x2.shape)    # x2 shape:  torch.Size([4, 128, 91, 109])
-        # print('x3 shape: ', x3.shape)    # x3 shape:  torch.Size([4, 256, 45, 54])
-        # print('x4 shape: ', x4.shape)    # x4 shape:  torch.Size([4, 512, 22, 27])
-        # print('x5 shape: ', x5.shape)    # x5 shape:  torch.Size([4, 1024, 11, 13])
+        print('x shape: ', x.shape)
+        print('x1 shape: ', x1.shape)
+        print('x2 shape: ', x2.shape)
+        print('x3 shape: ', x3.shape)
+        print('x4 shape: ', x4.shape)
+        print('x5 shape: ', x5.shape)
         x = self.up1(x5, x4)
-        # print('up1 shape: ', x.shape)    # up1 shape:  torch.Size([4, 512, 22, 27])
+        print('up1 shape: ', x.shape)
         x = self.up2(x, x3)
-        # print('up2 shape: ', x.shape)    # up2 shape:  torch.Size([4, 256, 45, 54])
+        print('up2 shape: ', x.shape)
         x = self.up3(x, x2)
-        # print('up3 shape: ', x.shape)    # up3 shape:  torch.Size([4, 128, 91, 109])
+        print('up3 shape: ', x.shape)
         x = self.up4(x, x1)
-        # print('up4 shape: ', x.shape)    # up4 shape:  torch.Size([4, 64, 182, 218])
+        print('up4 shape: ', x.shape)
         logits = self.outc(x)
-        # print('out shape: ', logits.shape)  # out shape:  torch.Size([4, 1, 182, 218])
-        return x5, logits
+        print('out shape: ', logits.shape)
+        return logits
 
     def use_checkpointing(self):
         self.inc = torch.utils.checkpoint(self.inc)
@@ -140,10 +139,3 @@ class UNet(nn.Module):
         self.up3 = torch.utils.checkpoint(self.up3)
         self.up4 = torch.utils.checkpoint(self.up4)
         self.outc = torch.utils.checkpoint(self.outc)
-
-    def features(self, x):
-        features, *rest = self.forward(x)
-        features_flattened = torch.flatten(features, start_dim=1)
-        print('features shape: ', features.shape)      # torch.Size([4, 1024, 11, 13])
-        print('features flattened shape: ', features_flattened.shape) 
-        return features_flattened

@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # cpy unet to device
     net.to(device=device)
     # load model parameters
-    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/unet_50_0134_mse_bs4_0410.pth', map_location=device)
+    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_500_mse_bs4_sps1_0510_balanced_4_8_5_3_4_2.pth', map_location=device)
     net.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     scheduler.load_state_dict(checkpoint['scheduler_state_dict'])

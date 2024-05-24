@@ -45,12 +45,12 @@ class Down(nn.Module):
 
 
 class UNet_Encoder(nn.Module):
-    def __init__(self, n_channels, bilinear=False):
+    def __init__(self, n_channels, bilinear=False, n_classes=64):
         super(UNet_Encoder, self).__init__()
         self.n_channels = n_channels
         # self.n_classes = n_classes
         self.bilinear = bilinear
-
+        self.n_classes = n_classes
         # self.inc = (DoubleConv(n_channels, 8))
         # self.down1 = (Down(8, 16))
         # self.down2 = (Down(16, 32))
@@ -61,14 +61,15 @@ class UNet_Encoder(nn.Module):
         # self.fc = nn.Linear(128*11*13, 512)
 
 
-        self.inc = (DoubleConv(n_channels, 4))
-        self.down1 = (Down(4, 8))
-        self.down2 = (Down(8, 16))
-        self.down3 = (Down(16, 32))
+        MULT = 2
+        self.inc = (DoubleConv(n_channels, 4 * MULT))
+        self.down1 = (Down(4 * MULT, 8 * MULT))
+        self.down2 = (Down(8 * MULT, 16 * MULT))
+        self.down3 = (Down(16 * MULT, 32 * MULT))
         factor = 2 if bilinear else 1   # factor = 1
-        self.down4 = (Down(32, 64 // factor))
+        self.down4 = (Down(32 * MULT, 64 * MULT // factor))
         self.flatten = nn.Flatten()
-        self.fc = nn.Linear(64*11*13, 512)
+        self.fc = nn.Linear(64 * 11 * 13 * MULT, 1024)
 
         # self.up1 = (Up(1024, 512 // factor, bilinear))
         # self.up2 = (Up(512, 256 // factor, bilinear))
@@ -77,23 +78,23 @@ class UNet_Encoder(nn.Module):
         # self.outc = (OutConv(64, n_classes))
 
     def forward(self, x):
-        print('down x shape: ', x.shape)
+        # print('down x shape: ', x.shape)
         x1 = self.inc(x)
-        print('down x1 shape: ', x1.shape)
+        # print('down x1 shape: ', x1.shape)  # torch.Size([4, 8, 182, 218])
         x2 = self.down1(x1)
-        print('down x2 shape: ', x2.shape)
+        # print('down x2 shape: ', x2.shape)  # torch.Size([4, 16, 91, 109])
         x3 = self.down2(x2)
-        print('down x3 shape: ', x3.shape)
+        # print('down x3 shape: ', x3.shape)  # torch.Size([4, 32, 45, 54])
         x4 = self.down3(x3)
-        print('down x4 shape: ', x4.shape)
+        # print('down x4 shape: ', x4.shape)  # torch.Size([4, 64, 22, 27])
         x5 = self.down4(x4)
-        print('down x5 shape: ', x5.shape)
+        # print('down x5 shape: ', x5.shape)  # torch.Size([4, 128, 11, 13])
         x_flatten = self.flatten(x5)
-        print('down x flatten shape: ', x_flatten.shape)
+        # print('down x flatten shape: ', x_flatten.shape)     # torch.Size([4, 18304])
         x_encoder_out = self.fc(x_flatten)
-        print('down encoder output shape: ', x_encoder_out.shape)
+        # print('down encoder output shape: ', x_encoder_out.shape)
 
-        return x_encoder_out
+        return x_encoder_out, x1, x2, x3, x4
 
     def use_checkpointing(self):
         self.inc = torch.utils.checkpoint(self.inc)
@@ -106,3 +107,13 @@ class UNet_Encoder(nn.Module):
         # self.up3 = torch.utils.checkpoint(self.up3)
         # self.up4 = torch.utils.checkpoint(self.up4)
         self.outc = torch.utils.checkpoint(self.outc)
+
+    def features(self, x):
+        features, *rest = self.forward(x)
+        features_site_removal = features[:, self.n_classes: ]
+        # print('features_site_removal shape: ', features_site_removal.shape)
+        # print('features_site shape: ', features.shape)
+        # return features_site_removal
+        # return features
+        return features[:, self.n_classes: ]
+        # return features[:, : self.n_classes]

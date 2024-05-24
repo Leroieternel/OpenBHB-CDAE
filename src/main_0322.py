@@ -11,6 +11,7 @@ import argparse
 import models
 import losses
 import time
+import wandb
 import torch.utils.tensorboard
 
 from torch import nn
@@ -22,6 +23,7 @@ from util import compute_age_mae, compute_site_ba
 from data import FeatureExtractor, OpenBHB, bin_age
 from data.transforms import Crop, Pad, Cutout
 from tqdm import tqdm
+from models.age_net import Age_Net
 from utils.dice_score import dice_loss
 
 
@@ -34,7 +36,6 @@ def parse_arguments():
     # Misc
     parser.add_argument('--device', type=str, help='torch device', default='cuda')
     parser.add_argument('--print_freq', type=int, help='print frequency', default=10)
-    parser.add_argument('--trial', type=int, help='random seed / trial id', default=0)
     parser.add_argument('--save_dir', type=str, help='output dir', default='output')
     parser.add_argument('--save_freq', type=int, help='save frequency', default=50)
     parser.add_argument('--data_dir', type=str, help='path of data dir', default='/data')
@@ -66,7 +67,7 @@ def parse_arguments():
     parser.add_argument('--alpha', type=float, help='infonce weight', default=1.)
     parser.add_argument('--n_views', type=int, help='num. of multiviews', default=1)
     parser.add_argument('--bs', type=int, help='num. of subjects per batch', default=4)
-    parser.add_argument('--sps', type=int, help='Slices per subject', default=8)
+    parser.add_argument('--sps', type=int, help='Slices per subject', default=1)
 
     opts = parser.parse_args()
 
@@ -180,24 +181,17 @@ def load_model(opts):
     return model
 
 
-def train(train_loader, model, optimizer, opts, epoch, train_loss):    
+def train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, params):    
     '''
     load bs*sps slices per call
     '''
     
     scaler = torch.cuda.amp.GradScaler() if opts.amp else None    # None
-    model.train()
+    
 
     t1 = time.time()
-    for idx, (images, label, _) in enumerate(train_loader):   # labels: torch.Size([6])
-        # if idx == 0: 
-            # print('idx: ', idx)
-        # print('image type: ', type(images))     # list
-        # print('label shape from original dataloader: ', labels.shape)    # tensor([14.4000, 24.0000,  6.4700,  8.9973, 36.0000, 19.0000, 29.0000, 24.0000,
-                               # 26.2724, 23.0000], dtype=torch.float64)
-            # print('len(images): ', len(images))   # 1
-        print('single train image shape: ', images[0].shape)   # torch.Size([10, 1, 182, 218, 182])
-            # print('single train labels shape: ', labels[0])     # tensor(14.4000, dtype=torch.float64)
+    for idx, (images, ages, _) in enumerate(train_loader):   # labels: torch.Size([6])
+
         
 
         ''' transform dataloader images: [10, 1, 182, 218, 182] to [80, 1, 182, 218]
@@ -216,116 +210,91 @@ def train(train_loader, model, optimizer, opts, epoch, train_loss):
 
         images = torch.cat(images, dim=0)  # images: torch.Size([10, 1, 182, 218, 182])
         images_numpy = images.numpy()   # (6, 1, 182, 218, 182)
-        # labels_numpy = labels.numpy()   # (6,)
-        # print('numpy labels: ', labels_numpy)  # e.g. [21. 18.]
-        # print('numpy labels shape: ', labels_numpy.shape)   # (2,)
-
+        ages = ages.float()
 
         # randomly choose opts.sps slices per subject: (one batch: 10 subjects, each pick 8 slices)
         indices = np.random.choice(182, size=opts.bs * opts.sps, replace=True)    # randomly pick 80 slices from images
-        # print('selected indices: ', indices)
         X = []
-        # y = []
         for i in range(opts.bs):   # 10 subjects
-            # print('labels[i].item(): ', labels[i].item())
-            # y.append(labels_numpy[i])
             print(indices[i * opts.sps: (i+1) * opts.sps])
             X.append(images_numpy[i, :, :, :, indices[i * opts.sps: (i+1) * opts.sps]]) 
-            # print(batch_X[i, :, :, :, indices[i*SPS:(i+1)*SPS]].shape)  # (8, 1, 182, 218)
 
         X = np.array(X)     # (6, 8, 1, 182, 218)
         X = X.reshape(opts.bs * opts.sps, *X.shape[2:])    # X: (80, 1, 182, 218)
 
-        print('transformed mean: ', X[24][0].mean())
-        np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/train_img_sample.npy', X[24][0])
-        # print('label shape: ', len(y))   # bs
-        # y = [val for val in y for i in range(opts.sps)]
-        # y = np.array(y)  # (48,) 
-        # print('label shape after repeating: ', y.shape)
-        # print('y: ', y)
+        # print('transformed mean: ', X[24][0].mean())
+        # np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/train_img_sample.npy', X[24][0])
 
-        # ytorch = torch.from_numpy(y)
-        # print('torch y shape: ', ytorch.shape)            # torch.Size([16])  bs*sps
         torch_X = torch.from_numpy(X).to(opts.device)     # torch.Size([48, 1, 182, 218])
         true_masks = torch.from_numpy(X).to(opts.device) 
-        # torch_y = torch.from_numpy(y).to(opts.device)     # torch.Size([48])
-        # torch_X.to(opts.device)       # torch_X: torch.Size([80, 1, 182, 218])
-        # print('input torch shape: ', torch_X.shape)   
-
-        # bsz = labels.shape[0]   # 16
-        # print(bsz)
+        torch_age = ages.repeat_interleave(opts.sps).to(opts.device) 
 
 
         warmup_learning_rate(opts, epoch, idx, len(train_loader), optimizer)
-        # criterion = nn.BCEWithLogitsLoss()
-        criterion = nn.MSELoss()
-        # train_loss = []
+
+        print('torch_X: ', torch_X)
+        print('torch age: ', torch_age)
+
+        recon_criterion = nn.MSELoss()
 
         # start training
-        with tqdm(total=3227*182, desc=f'Epoch {epoch}/{opts.epochs}') as pbar:
-            with torch.cuda.amp.autocast(scaler is not None):   # automatic mixed precision
-                masks_pred = model(torch_X)   # output dimension: torch.Size([48, 1, 182, 218])
-                # print('masks shape: ', masks_pred.shape)    # torch.Size([bs*sps, 1, 182, 218])
+        with torch.cuda.amp.autocast(scaler is not None):   # automatic mixed precision
+            _, masks_pred = model(torch_X)   # output dimension: torch.Size([48, 1, 182, 218])
+            features_flattened = model.features(torch_X)
+            if idx == 1:
+                print('features_flattened shape: ', features_flattened.shape)
+            age_pred = model_age(features_flattened)
+            age_loss = recon_criterion(age_pred, torch_age)
 
-                loss = criterion(masks_pred.squeeze(1), true_masks.float().squeeze(1))
-                train_loss.append(loss.item())    
-                # loss += dice_loss(F.sigmoid(masks_pred.squeeze(1)), true_masks.float().squeeze(1), multiclass=False)
+            print('masks_pred shape: ', masks_pred.shape)
+            print('true mask shape: ', true_masks.shape)
+            recon_loss = recon_criterion(masks_pred, true_masks.float())
 
-            
-            optimizer.zero_grad()
-            grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
-            grad_scaler.scale(loss).backward()
-            grad_scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), opts.gradient_clipping)
-            grad_scaler.step(optimizer)
-            grad_scaler.update()
+            if epoch <= 5:
+                loss = 8 * recon_loss
+            elif 5 < epoch <= 49:
+                loss = 7 * recon_loss
+            else:
+                loss = 7 * recon_loss + 0.1 * age_loss.float()
+      
+            train_loss.append(loss.item())    
 
-            pbar.update(opts.bs * opts.sps)
+        
+        optimizer.zero_grad()
+        grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
+        grad_scaler.scale(loss).backward()
+        grad_scaler.unscale_(optimizer)
+        torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
+        grad_scaler.step(optimizer)
+        grad_scaler.update()
+        print('backprop ok')
 
-    return masks_pred
+    if idx % 50 == 0:
+
+        wandb.log({'epoch': epoch, 'loss': loss.item(), 'recon_loss:': recon_loss.item(), 'age_loss': age_loss.item()})
+        wandb.log({"original_images": wandb.Image(torch_X[0]), "xi_a_hat_images": wandb.Image(masks_pred[0])})
+
+
+    # return masks_pred
 
 if __name__ == '__main__':
     torch.cuda.empty_cache()
     opts = parse_arguments()
-    
-    set_seed(opts.trial)
 
     # train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
     train_loader, test_loader_int, test_loader_ext = load_data(opts)
     model = load_model(opts)
-    optimizer = torch.optim.RMSprop(model.parameters(), lr=opts.lr, weight_decay=opts.weight_decay, momentum=opts.momentum)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5)  # goal: maximize Dice score
+    model_age = Age_Net().float().to(opts.device)
+    model.train()
+    model_age.train()
+    params_unet = list(model.parameters())
+    param_age_mlp = list(model_age.parameters())
+    params = params_unet
 
-    # optimizer = load_optimizer(model, opts)
-
-
-
-    model_name = opts.model
-    if opts.warm:
-        model_name = f"{model_name}_warm"
-    if opts.amp:
-        model_name = f"{model_name}_amp"
-    
-    
-    run_name = (f"{model_name}_"
-                # f"{optimizer_name}_"
-                f"tf{opts.tf}_"
-                f"lr{opts.lr}_{opts.lr_decay}_step{opts.lr_decay_step}_rate{opts.lr_decay_rate}_"
-                f"temp{opts.temp}_"
-                f"wd{opts.weight_decay}_"
-                f"bsz{opts.bs}_views{opts.n_views}_"
-                f"trainall_{opts.train_all}_"
-                # f"kernel_{kernel_name}_"
-                # f"f{opts.alpha}_lambd{opts.lambd}_"
-                f"trial{opts.trial}")
-    print('run name: ', run_name)
-    save_dir = os.path.join(opts.save_dir, f"openbhb_models", run_name)
-    ensure_dir(save_dir)
-
+    optimizer = torch.optim.RMSprop(params, lr=opts.lr, weight_decay=opts.weight_decay, momentum=opts.momentum)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
 
     print('Config:', opts)
-    print('Model:', model.__class__.__name__)
-    # print('Criterion:', infonce)
     print('Optimizer:', optimizer)
     print('Scheduler:', opts.lr_decay)
 
@@ -335,15 +304,69 @@ if __name__ == '__main__':
     start_time = time.time()
     best_acc = 0.
 
-
     # training 
     train_loss = []
-    for epoch in range(1, opts.epochs + 1):
-        adjust_learning_rate(opts, optimizer, epoch)
-        # with tqdm(total=3227*182, desc=f'Epoch {epoch}/{opts.epochs}') as pbar:
+    wandb.init(project='openbhb_cdae_0524_ae_mlp_1', dir='/scratch_net/murgul/jiaxia/saved_models')
+    config = wandb.config
+    config.learning_rate = opts.lr
+    wandb.watch(model, log="all")
 
-            # train one batch
-        train(train_loader, model, optimizer, opts, epoch, train_loss)
+    for epoch in range(0, opts.epochs):
+        adjust_learning_rate(opts, optimizer, epoch)
+        train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, params)
+        if epoch == 49:
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1_epoch50.pth')
+        if epoch == 0:
+            optimizer.add_param_group({'params': param_age_mlp})
+        if epoch >= 0:
+            params = params_unet + param_age_mlp
+        
+        if epoch == 99:
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1_epoch100.pth')
+        if epoch == 149:
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1_epoch150.pth')
+        if epoch == 199:
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1_epoch200.pth')
+        if epoch == 249:
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1_epoch250.pth')
+        if epoch == 299:
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1_epoch300.pth')
 
     print('train loss: ', train_loss)
     train_loss_numpy = np.array(train_loss)
@@ -355,34 +378,8 @@ if __name__ == '__main__':
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
             }
-    # torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/unet_50_0134_mse_bs4_0410.pth')
+    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0524_1.pth')
 
-
-        # t2 = time.time()
-    #     print(f"epoch {epoch}, total time {t2-start_time:.2f}, epoch time {t2-t1:.3f} loss {loss_train:.4f}")
-
-    #     if epoch % opts.save_freq == 0:
-
-    #         mae_train, mae_int, mae_ext = compute_age_mae(model, train_loader_score, test_loader_int, test_loader_ext, opts)
-    #         print("Age MAE:", mae_train, mae_int, mae_ext)
-
-    #         ba_train, ba_int, ba_ext = compute_site_ba(model, train_loader_score, test_loader_int, test_loader_ext, opts)
-    #         print("Site BA:", ba_train, ba_int, ba_ext)
-
-    #         challenge_metric = ba_int**0.3 * mae_ext
-    #         print("Challenge score", challenge_metric)
-    
-    #     save_file = os.path.join(save_dir, f"weights.pth")
-    #     save_model(model, optimizer, opts, epoch, save_file)
-    
-    # mae_train, mae_int, mae_ext = compute_age_mae(model, train_loader_score, test_loader_int, test_loader_ext, opts)
-    # print("Age MAE:", mae_train, mae_int, mae_ext)
-
-    # ba_train, ba_int, ba_ext = compute_site_ba(model, train_loader_score, test_loader_int, test_loader_ext, opts)
-    # print("Site BA:", ba_train, ba_int, ba_ext)
-    
-    # challenge_metric = ba_int**0.3 * mae_ext
-    # print("Challenge score", challenge_metric)
 
     
 

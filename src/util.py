@@ -133,6 +133,8 @@ def adjust_learning_rate(args, optimizer, epoch):
         lr = eta_min + (lr - eta_min) * (
                 1 + math.cos(math.pi * epoch / args.epochs)) / 2
     else:
+        print("lr_decay_epochs:", args.lr_decay_epochs)
+        print("Types of elements:", [type(x) for x in args.lr_decay_epochs])
         steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
         if steps > 0:
             lr = lr * (args.lr_decay_rate ** steps)
@@ -156,28 +158,75 @@ def gather_age_feats(model, dataloader, opts):
     age_labels = []
 
     model.eval()
-    for idx, (images, labels, _) in enumerate(dataloader):
-        if isinstance(images, list):
-            images = images[0]
-        images = images.to(opts.device)
-        features.append(model.features(images))
-        age_labels.append(labels)
+    for idx, (images, ages, _) in enumerate(dataloader):
+        # if idx == 1:
+        #     break
+        # images = images.to(opts.device)
+        # print('type(images): ', type(images))
+        images = torch.cat(images, dim=0)  # images: torch.Size([bs, 1, 182, 218, 182])
+        # print('images shape: ', images.shape)
+        images_numpy = images.numpy() 
+        indices = np.random.choice(182, size=opts.bs * opts.sps, replace=True)
+        X = []
+        if images.shape[0] == opts.bs:
+            for i in range(opts.bs):   # opts.bs subjects
+                # print(indices[i * opts.sps: (i+1) * opts.sps])
+                # print('site label gt: ', sites[i])
+                
+                X.append(images_numpy[i, :, :, :, indices[i * opts.sps: (i+1) * opts.sps]]) 
+                # sample_a = np.zeros(64, dtype=np.float32)   # sample_a: one hot site label
+
+
+            # print('y site label: ', y_site)
+
+
+            X = np.array(X)     # (6, 8, 1, 182, 218)
+            X = X.reshape(opts.bs * opts.sps, *X.shape[2:])
+            torch_X = torch.from_numpy(X).to(opts.device) 
+            feature = model.features(torch_X)
+            # feature = wi_net(encoder_feature)
+            features.append(feature)
+            # print('model features shape: ', model.features(torch_X).shape)
+            # features.append(model.features(torch_X))
+            for i in range(opts.sps):
+                age_labels.append(ages)
+                
+            if idx == 1:
+                print('torch X shape: ', torch_X.shape)
+                print('torch X: ', torch_X)
+                print('feature: ', feature)
+                print('age feature shape: ', feature.shape)
+                # print('feature: ', model.features(torch_X))
+                # print('age feature shape: ', model.features(torch_X).shape)
+
+            # print('features: ', features)
+            # print('feature length: ', len(features))
+            # print('age length: ', len(age_labels))
     
+    # print('torch.cat(features, 0) shape: ', torch.cat(features, 0).shape)
     return torch.cat(features, 0).cpu().numpy(), torch.cat(age_labels, 0).cpu().numpy()
 
 @torch.no_grad()
 def compute_age_mae(model, train_loader, test_int, test_ext, opts):
-    site_estimator = models.AgeEstimator()
+    age_estimator = models.AgeEstimator()
 
     print("Training age estimator")
     train_X, train_y = gather_age_feats(model, train_loader, opts)
-    mae_train = site_estimator.fit(train_X, train_y)
+    print('Fitting: ')
+    mae_train = age_estimator.fit(train_X, train_y)
 
     print("Computing BA")
+    print('reading internal validation dataset: ')
     int_X, int_y = gather_age_feats(model, test_int, opts)
+    print('train_x age mae score: ', age_estimator.score(train_X, train_y))
+    print('int x age shape: ', int_X.shape)
+    print('int y age shape: ', int_y.shape)
+    print('reading external validation dataset: ')
     ext_X, ext_y = gather_age_feats(model, test_ext, opts)
-    mae_int = site_estimator.score(int_X, int_y)
-    mae_ext = site_estimator.score(ext_X, ext_y)
+    print('ext x age shape: ', ext_X.shape)
+    print('ext y age shape: ', ext_y.shape)
+    mae_int = age_estimator.score(int_X, int_y)
+    mae_ext = age_estimator.score(ext_X, ext_y)
 
     return mae_train, mae_int, mae_ext
 
@@ -188,13 +237,54 @@ def gather_site_feats(model, dataloader, opts):
 
     model.eval()
     for idx, (images, _, sites) in enumerate(dataloader):
-        if isinstance(images, list):
-            images = images[0]
-        images = images.to(opts.device)
-        features.append(model.features(images))
-        site_labels.append(sites)
-    
+        # if idx == 1:
+        #     break
+        # images = images.to(opts.device)
+        # features.append(model.features(images))
+        # site_labels.append(sites)
+        images = torch.cat(images, dim=0)  # images: torch.Size([bs, 1, 182, 218, 182])
+        images_numpy = images.numpy() 
+        indices = np.random.choice(182, size=opts.bs * opts.sps, replace=True)
+        X = []
+        if images_numpy.shape[0] == opts.bs:
+            for i in range(opts.bs):   # opts.bs subjects
+                # print(indices[i * opts.sps: (i+1) * opts.sps])
+                # print('site label gt: ', sites[i])
+                X.append(images_numpy[i, :, :, :, indices[i * opts.sps: (i+1) * opts.sps]])
+                # sample_a = np.zeros(64, dtype=np.float32)   # sample_a: one hot site label
+
+
+            # print('y site label: ', y_site)
+
+
+            X = np.array(X)     # (4, 1, 1, 182, 218)
+            X = X.reshape(opts.bs * opts.sps, *X.shape[2:]) 
+            torch_X = torch.from_numpy(X).to(opts.device) 
+            np.save('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/torch_x_sample.npy', torch_X.cpu().numpy())
+            # encoder_feature = model.features(torch_X)
+            # feature = wi_net(encoder_feature)
+            feature = model.features(torch_X)
+            # print('model.features(torch_X): ', model.features(torch_X))
+            # features.append(model.features(torch_X))
+            features.append(feature)
+            for i in range(opts.sps):
+                site_labels.append(sites)
+            
+            if idx == 1:
+                print('torch X shape: ', torch_X.shape)
+                print('torch X: ', torch_X)
+                print('feature: ', feature)
+                print('site feature shape: ', feature.shape)
+                # print('feature: ', model.features(torch_X))
+                # print('site feature shape: ', model.features(torch_X).shape)
+                # break
+                # print('features: ', features)
+                # print('torch.cat(features, 0) shape: ', torch.cat(features, 0))
+                # print('site label batch 1: ', sites)
+        # print('site features shape: ', )
+    # print('torch.cat(features, 0) shape: ', torch.cat(features, 0))
     return torch.cat(features, 0).cpu().numpy(), torch.cat(site_labels, 0).cpu().numpy()
+    
 
 @torch.no_grad()
 def compute_site_ba(model, train_loader, test_int, test_ext, opts):
@@ -202,12 +292,19 @@ def compute_site_ba(model, train_loader, test_int, test_ext, opts):
 
     print("Training site estimator")
     train_X, train_y = gather_site_feats(model, train_loader, opts)
+    # print('train site features: ', train_X)
     ba_train = site_estimator.fit(train_X, train_y)
-
+    # site_estimator.plot_confusion_matrix(train_X, train_y)
+    
     print("Computing BA")
     int_X, int_y = gather_site_feats(model, test_int, opts)
     ext_X, ext_y = gather_site_feats(model, test_ext, opts)
+    print('int x site shape: ', int_X.shape)
+    print('int y site shape: ', int_y.shape)
+    print('train_x site ba score: ', site_estimator.score(train_X, train_y))
     ba_int = site_estimator.score(int_X, int_y)
-    ba_ext = site_estimator.score(ext_X, ext_y)
+    # ba_ext = site_estimator.score(ext_X, ext_y)
 
-    return ba_train, ba_int, ba_ext
+    return ba_train, ba_int
+    # return ba_train, ba_int, ba_ext   
+    

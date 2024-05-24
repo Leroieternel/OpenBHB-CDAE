@@ -1,0 +1,3 @@
+program: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/age_site_score.py
+data_dir: /usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data
+tf: none
