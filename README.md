@@ -8,7 +8,7 @@ For running dae unet (main_dae.py):
   cd ../contrastive-brain-age-prediction/src
   python launcher.py exp/dae.yaml
 
-For running cdae unet (main_0322.py):
+For running cdae unet (main_cdae_age_mlp.py):
   cd ../contrastive-brain-age-prediction/src
   python launcher.py exp/cdae_age_mlp.yaml
 
