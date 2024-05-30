@@ -26,7 +26,7 @@ U-Net models:
 3. (5 classes)  normal U-Net encoder/decoder parts: unet_encoder_balanced.py unet_decoder_balanced.py
 4. (5 classes)  without skip connection: unet_en_wo_sc.py   unet_de_wo_sc.py
 
-Age models:
+Age models:  (similar to wi net)
 For 64 classes: age_net.py
 For 5 classes: age_net_balanced.py
 
