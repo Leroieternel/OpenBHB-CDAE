@@ -16,15 +16,16 @@ import torch.utils.tensorboard
 
 from torch import nn
 from torchvision import transforms
-from torchvision import datasets
+from torchvision import datasets, models
 from util import AverageMeter, NViewTransform, ensure_dir, set_seed, arg2bool, save_model
 from util import warmup_learning_rate, adjust_learning_rate
 from util import compute_age_mae, compute_site_ba
-from data import FeatureExtractor, OpenBHB, bin_age, OpenBHB_balanced_64
+from data import FeatureExtractor, OpenBHB, bin_age
 from data.transforms import Crop, Pad, Cutout
 from tqdm import tqdm
 from models.age_net import Age_Net
 from utils.dice_score import dice_loss
+from models.age_net import Age_Net
 
 
 
@@ -58,7 +59,7 @@ def parse_arguments():
     parser.add_argument('--gradient_clipping', type=int, help='max gradient norm', default=1.0)
 
     # Data
-    parser.add_argument('--train_all', type=arg2bool, help='train on all dataset including validation (int+ext)', default=True)
+    # parser.add_argument('--train_all', type=arg2bool, help='train on all dataset including validation (int+ext)', default=False)
     parser.add_argument('--tf', type=str, help='data augmentation', choices=['none', 'crop', 'cutout', 'all'], default='all')
     
     # Loss 
@@ -132,7 +133,22 @@ def load_data(opts):
 
     # train_dataset = OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train, label=opts.label,
     #                         load_feats=None)
-    train_dataset = OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train)
+    train_dataset = OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train)
+    # print("Total dataset length:", len(train_dataset))    # 3227
+
+    # valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train)
+    # valext = OpenBHB(opts.data_dir, train=False, internal=False, transform=T_train)
+
+    # valint_feats, valext_feats = None, None
+    # valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train, load_feats=valint_feats)
+    # valext = OpenBHB(opts.data_dir, train=False, internal=False, transform=T_train, load_feats=valext_feats)
+
+    # valint = OpenBHB(opts.data_dir, train=False, internal=True, transform=T_train,
+    #                     label=opts.label, load_feats=valint_feats)
+    # valext = OpenBHB(opts.data_dir, train=False, internal=False, transform=T_train,
+    #                     label=opts.label, load_feats=valext_feats)
+        # print('valint length: ', len(valint))    # 362
+        # print('valext length: ', len(valext))    # 395
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opts.bs, shuffle=True, num_workers=3,
                                                persistent_workers=True, drop_last=True)
@@ -165,6 +181,17 @@ def load_model(opts):
    
     return model
 
+class Feature_resnet(nn.Module):
+    def __init__(self):
+        super(Feature_resnet, self).__init__()
+        # 加载预训练的 ResNet-18，但不包括最后的全连接层
+        self.resnet = models.resnet18(pretrained=True)
+        self.resnet = nn.Sequential(*(list(self.resnet.children())[:-1]))  # 删除最后的全连接层
+
+    def forward(self, x):
+        # 前向传递到最后的全连接层之前
+        features = self.resnet(x)
+        return features
 
 def train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, params):    
     '''
@@ -222,42 +249,37 @@ def train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, pa
 
         recon_criterion = nn.MSELoss()
 
+
         # start training
+        
         with torch.cuda.amp.autocast(scaler is not None):   # automatic mixed precision
-            _, masks_pred = model(torch_X)   # output dimension: torch.Size([48, 1, 182, 218])
-            features_flattened = model.features(torch_X)
-            if idx == 1:
-                print('features_flattened shape: ', features_flattened.shape)
-            age_pred = model_age(features_flattened)
+            masks_pred, *rest = model(torch_X)   # output dimension: torch.Size([48, 1, 182, 218])
+            print('mask pred shape: ', masks_pred.shape)
+            recon_criterion = nn.MSELoss()
+            age_pred = model_age(masks_pred)
+            print('age_pred: ', age_pred)
             age_loss = recon_criterion(age_pred, torch_age)
 
-            print('masks_pred shape: ', masks_pred.shape)
-            print('true mask shape: ', true_masks.shape)
-            recon_loss = recon_criterion(masks_pred, true_masks.float())
-
-            if epoch <= 5:
-                loss = 8 * recon_loss
-            elif 5 < epoch <= 49:
-                loss = 7 * recon_loss
-            else:
-                loss = 7 * recon_loss + 0.1 * age_loss.float()
-      
-            train_loss.append(loss.item())    
+            loss = age_loss
+            print('age loss: ', loss)
 
         
         optimizer.zero_grad()
-        grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
-        grad_scaler.scale(loss).backward()
-        grad_scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
-        grad_scaler.step(optimizer)
-        grad_scaler.update()
+        loss.backward()
+        optimizer.step()
+        # grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
+        # grad_scaler.scale(loss).backward()
+        # grad_scaler.unscale_(optimizer)
+        # torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
+        # grad_scaler.step(optimizer)
+        # grad_scaler.update()
         print('backprop ok')
 
     if idx % 50 == 0:
 
-        wandb.log({'epoch': epoch, 'loss': loss.item(), 'recon_loss:': recon_loss.item(), 'age_loss': age_loss.item()})
+        wandb.log({'epoch': epoch, 'loss': loss.item(), 'age_loss': age_loss.item()})
         wandb.log({"original_images": wandb.Image(torch_X[0]), "xi_a_hat_images": wandb.Image(masks_pred[0])})
+        
 
 
     # return masks_pred
@@ -268,13 +290,21 @@ if __name__ == '__main__':
 
     # train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
     train_loader, test_loader_int, test_loader_ext = load_data(opts)
-    model = load_model(opts)
-    model_age = Age_Net(input_dim=146432).float().to(opts.device)
+    # model = load_model(opts)、
+    # model = models.UNet_Encoder(n_channels=1).to(opts.device)
+    
+    model = Feature_resnet().to(opts.device)
+    model_age = Age_Net(input_dim=512).to(opts.device)
+
+# Here the size of each output sample is set to 2.
+# Alternatively, it can be generalized to nn.Linear(num_ftrs, len(class_names)).
+    # model.fc = nn.Linear(num_ftrs, 1)
     model.train()
     model_age.train()
-    params_unet = list(model.parameters())
-    param_age_mlp = list(model_age.parameters())
-    params = params_unet + param_age_mlp
+    # params_unet = list(model.parameters())
+    # param_age_mlp = list(model_age.parameters())
+    # params = params_unet + param_age_mlp
+    params = list(model.parameters()) + list(model_age.parameters())
 
     optimizer = torch.optim.RMSprop(params, lr=opts.lr, weight_decay=opts.weight_decay, momentum=opts.momentum)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
@@ -283,15 +313,15 @@ if __name__ == '__main__':
     print('Optimizer:', optimizer)
     print('Scheduler:', opts.lr_decay)
 
-    if opts.amp:
-        print("Using AMP")
+    # if opts.amp:
+    #     print("Using AMP")
     
     start_time = time.time()
     best_acc = 0.
 
     # training 
     train_loss = []
-    wandb.init(project='openbhb_cdae_0525_ae_mlp_1', dir='/scratch_net/murgul/jiaxia/saved_models')
+    wandb.init(project='openbhb_cdae_0528_ae_mlp_1', dir='/scratch_net/murgul/jiaxia/saved_models')
     config = wandb.config
     config.learning_rate = opts.lr
     wandb.watch(model, log="all")

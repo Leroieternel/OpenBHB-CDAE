@@ -45,25 +45,46 @@ def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal va
     print("Indices of site 3 elements:", site_3_indices)    # [3]
 
     sites_top2to5 = [1, 10, 17, 24]
+    site_1 = [1]
+    site_10 = [10]
+    site_17 = [17]
+    site_24 = [24]
     site_3 = [3]
     indices_top2to5 = df[df['site'].isin(sites_top2to5)]
     indices_top1 = df[df['site'].isin(site_3)]
+    indices_top2 = df[df['site'].isin(site_1)]
+    indices_top3 = df[df['site'].isin(site_10)]
+    indices_top4 = df[df['site'].isin(site_17)]
+    indices_top5 = df[df['site'].isin(site_24)]
     list_indices_top2to5 = indices_top2to5.index.tolist()
     list_indices_site3 = indices_top1.index.tolist()
+    list_indices_top2 = indices_top2.index.tolist()
+    list_indices_top3 = indices_top3.index.tolist()
+    list_indices_top4 = indices_top4.index.tolist()
+    list_indices_top5 = indices_top5.index.tolist()
     selected_site3 = np.random.choice(list_indices_site3, size=200, replace=False)
+    selected_top2 = np.random.choice(list_indices_top2, size=50, replace=False)
+    selected_top3 = np.random.choice(list_indices_top3, size=50, replace=False)
+    selected_top4 = np.random.choice(list_indices_top4, size=50, replace=False)
+    selected_top5 = np.random.choice(list_indices_top5, size=50, replace=False)
     print('filtered_indices_top2to5: ', len(list_indices_top2to5))
+    print('len selected top 2: ', len(list_indices_top2))
+    print('len selected top 3: ', len(list_indices_top3))
+    print('len selected top 4: ', len(list_indices_top4))
+    print('len selected top 5: ', len(list_indices_top5))
     print('length of filtered_indices_top1: ', len(selected_site3))
     print('filtered_indices_top1: ', selected_site3)
 
     balanced_indices = selected_site3.tolist() + list_indices_top2to5
-    print('length of balanced indices: ', len(balanced_indices))
-    print('balanced indices: ', balanced_indices)
+    balanced_indices_1 = selected_site3.tolist() + selected_top2.tolist() + selected_top3.tolist() + selected_top4.tolist() + selected_top5.tolist()
+    print('length of balanced indices: ', len(balanced_indices_1))
+    print('balanced indices: ', balanced_indices_1)
     
     print("- y size [original]:", y_arr.shape)
     print("- x size [original]:", x_arr.shape)
 
-    x_arr_balanced = x_arr[balanced_indices]
-    y_arr_balanced = y_arr[balanced_indices]
+    x_arr_balanced = x_arr[balanced_indices_1]
+    y_arr_balanced = y_arr[balanced_indices_1]
 
     print("- x size [balanced]:", x_arr_balanced.shape)
     print("- y size [balanced]:", y_arr_balanced.shape)

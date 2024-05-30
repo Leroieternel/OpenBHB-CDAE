@@ -215,7 +215,7 @@ def compute_age_mae(model, train_loader, test_int, test_ext, opts):
     print('Fitting: ')
     mae_train = age_estimator.fit(train_X, train_y)
 
-    print("Computing BA")
+    print("Computing Age MAE")
     print('reading internal validation dataset: ')
     int_X, int_y = gather_age_feats(model, test_int, opts)
     print('train_x age mae score: ', age_estimator.score(train_X, train_y))

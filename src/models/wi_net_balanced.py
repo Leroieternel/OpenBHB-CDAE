@@ -2,21 +2,15 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class Wi_Net(nn.Module):
+class Wi_Net_balanced(nn.Module):
     def __init__(self, input_dim=960, output_dim=64, dropout_rate=0.5):
 
-        super(Wi_Net, self).__init__()
+        super(Wi_Net_balanced, self).__init__()
 
 
         self.layers = nn.Sequential(
             # first linear + BN + ReLU + Dropout
-            nn.Linear(input_dim, 512),
-            nn.BatchNorm1d(512),
-            nn.LeakyReLU(),
-            nn.Dropout(dropout_rate),
-
-            # second linear+ BN + ReLU + Dropout
-            nn.Linear(512, 256),
+            nn.Linear(input_dim, 256),
             nn.BatchNorm1d(256),
             nn.LeakyReLU(),
             nn.Dropout(dropout_rate),

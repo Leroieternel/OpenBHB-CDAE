@@ -13,6 +13,7 @@ from util import AverageMeter, NViewTransform, ensure_dir, set_seed, arg2bool, s
 from util import warmup_learning_rate, adjust_learning_rate
 from util import compute_age_mae, compute_site_ba
 from models.wi_net import Wi_Net
+from models.age_net import Age_Net
 
 # parser
 def parse_arguments():
@@ -109,9 +110,12 @@ if __name__ == "__main__":
     model_encoder = models.UNet_Encoder(n_channels=1)
     model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
     wi_net = Wi_Net(input_dim=960, output_dim=64, dropout_rate=0.5)
+    age_net = Age_Net(input_dim=960)
     param_encoder = list(model_encoder.parameters())
     param_decoder = list(model_decoder.parameters())
-    params = param_encoder + param_decoder
+    param_wi = list(wi_net.parameters())
+    param_age_mlp = list(age_net.parameters())
+    params = param_encoder + param_decoder + param_wi + param_age_mlp
 
     optimizer = torch.optim.RMSprop(params)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
@@ -127,13 +131,14 @@ if __name__ == "__main__":
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_300_mse_bs4_sps1_0517_all_7_epoch150.pth', map_location=device)
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0518_all_15_epoch100_inh.pth', map_location=device)
     
-    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_300_mse_bs4_sps1_0517_all_7_epoch100_inh.pth', map_location=device)
+    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_0525_2_epoch250.pth', map_location=device)
     model_encoder.load_state_dict(checkpoint['model_encoder_state_dict'])
     # model_decoder.load_state_dict(checkpoint['model_decoder_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
     wi_net.load_state_dict(checkpoint['wi_net_state_dict'])
     model_encoder.eval()
+    model_decoder.eval()
     wi_net.eval()
     
     # print('hi')

@@ -180,5 +180,5 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
             select_X = im.get_fdata()
             # select_X = select_X.transpose(2, 0, 1)
         select_X = select_X.reshape(self.MODALITIES[self.dtype]["shape"])
-        # print('transformed.shape', select_X.shape)   # （1, 182,  218, 182）
+        # print('transformed.shape', select_X.shape)   # （1, 182, 218, 182）
         return select_X

@@ -91,19 +91,21 @@ class UNet(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
-
-        self.inc = (DoubleConv(n_channels, 64))
-        self.down1 = (Down(64, 128))
-        self.down2 = (Down(128, 256))
-        self.down3 = (Down(256, 512))
+        
+        self.inc = (DoubleConv(n_channels, 8))
+        self.down1 = (Down(8, 16))
+        self.down2 = (Down(16, 32))
+        self.down3 = (Down(32, 64))
         factor = 2 if bilinear else 1
-        self.down4 = (Down(512, 1024 // factor))
+        self.down4 = (Down(64, 128 // factor))
 
-        self.up1 = (Up(1024, 512 // factor, bilinear))
-        self.up2 = (Up(512, 256 // factor, bilinear))
-        self.up3 = (Up(256, 128 // factor, bilinear))
-        self.up4 = (Up(128, 64, bilinear))
-        self.outc = (OutConv(64, n_classes))
+        self.up1 = (Up(128, 64 // factor, bilinear))
+        self.up2 = (Up(64, 32 // factor, bilinear))
+        self.up3 = (Up(32, 16 // factor, bilinear))
+        self.up4 = (Up(16, 8, bilinear))
+        self.outc = (OutConv(8, n_classes))
+
+        self.fc = nn.Linear(128 * 11 * 13, 1024)
 
     def forward(self, x):
         x1 = self.inc(x)
@@ -144,6 +146,11 @@ class UNet(nn.Module):
     def features(self, x):
         features, *rest = self.forward(x)
         features_flattened = torch.flatten(features, start_dim=1)
+    
         print('features shape: ', features.shape)      # torch.Size([4, 1024, 11, 13])
         print('features flattened shape: ', features_flattened.shape) 
-        return features_flattened
+
+        encoder_features = self.fc(features_flattened)
+        print('encoder_features shape: ', encoder_features.shape)
+
+        return encoder_features

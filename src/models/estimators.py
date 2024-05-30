@@ -26,6 +26,9 @@ class AgeEstimator(BaseEstimator):
         return y_pred
     
     def score(self, X, y):
+        prediction = cross_val_predict(self.age_estimator.best_estimator_, X, y, cv=5)
+        print('ground truth age: ', y)
+        print('predicted age: ', prediction)
         y_pred = self.age_estimator.predict(X)
         return mean_absolute_error(y, y_pred)
 
@@ -48,7 +51,8 @@ class SiteEstimator(BaseEstimator):
 
     def score(self, X, y):
         prediction = cross_val_predict(self.site_estimator.best_estimator_, X, y, cv=5)
-        print('prediction: ', prediction)
+        print('ground truth site: ', y)
+        print('predicted site: ', prediction)
         cm = confusion_matrix(y, prediction)
         plt.figure(figsize=(12, 10))
         sns.heatmap(cm, annot=True, fmt="d")

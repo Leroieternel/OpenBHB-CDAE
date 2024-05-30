@@ -42,25 +42,22 @@ filtered_indices_site3 = filtered_data_top1.index.tolist()
 selected_site3 = np.random.choice(filtered_indices_site3, size=200, replace=False)
 print('filtered_indices_top2to5: ', len(filtered_indices_top2to5))
 print('length of filtered_indices_top1: ', len(selected_site3))
-# print('filtered_indices_top1: ', selected_site3)
+print('filtered_indices_top1: ', selected_site3)
 
 balanced_indices = selected_site3.tolist() + filtered_indices_top2to5
 print('length of balanced indices: ', len(balanced_indices))
-# print('balanced indices: ', balanced_indices)
+print('balanced indices: ', balanced_indices)
 
 
 
 x_arr = np.load('/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data/train.npy', mmap_mode="r")
 y_arr = data[["age", "site"]].values
-x_arr_balanced = x_arr[balanced_indices]
-y_arr_balanced = y_arr[balanced_indices]
+# x_arr_balanced = x_arr[balanced_indices]
+# y_arr_balanced = y_arr[balanced_indices]
 print("- x size [original]:", x_arr.shape)
 print("- y size [original]:", y_arr.shape)
-print("- x size [balanced]:", x_arr_balanced.shape)
-print("- y size [balancced]:", y_arr_balanced.shape)
-
-print("Filtered indices range for top sites: ", filtered_indices_top2to5[:10])  # 打印一部分索引看看
-print("Selected indices from site 3 for balance: ", selected_site3[:10])
+# print("- x size [balanced]:", x_arr_balanced.shape)
+# print("- y size [balancced]:", y_arr_balanced.shape)
 
 # 查看筛选后的数据
 # print(filtered_data)

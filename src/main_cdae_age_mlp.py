@@ -18,11 +18,12 @@ from torchvision import datasets
 from util import AverageMeter, NViewTransform, ensure_dir, set_seed, arg2bool, save_model
 from util import warmup_learning_rate, adjust_learning_rate
 from util import compute_age_mae, compute_site_ba
-from data import FeatureExtractor, OpenBHB, bin_age, OpenBHB_balanced_64
+from data import FeatureExtractor, OpenBHB, bin_age, OpenBHB_balanced_64, OpenBHB_balanced
 from data.transforms import Crop, Pad, Cutout
 from tqdm import tqdm
 from utils.corr_score import correlation_loss
 from utils.bce_loss_score import bce_logits_loss
+from utils.ce_loss_score import cross_entropy_with_probs
 import wandb
 from models.wi_net import Wi_Net
 from models.age_net import Age_Net
@@ -133,6 +134,9 @@ def load_data(opts):
     T_train = NViewTransform(T_train, opts.n_views)
 
     train_dataset = OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train)
+    # train_loader_score = torch.utils.data.DataLoader(OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train),
+    #                                                  batch_size=opts.bs, shuffle=True, num_workers=3,
+    #                                                  persistent_workers=True)
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opts.bs, shuffle=True, num_workers=3,
                                                persistent_workers=True, drop_last=True)
@@ -144,34 +148,18 @@ def load_data(opts):
                                                 persistent_workers=True, drop_last=True)
     return train_loader, test_internal, test_external
 
-# def load_model(opts):
-#     if 'resnet' in opts.model:
-#         model = models.SupConResNet(opts.model, feat_dim=128)
-
-#     elif 'unet' in opts.model:
-#         model = models.UNet(n_channels=1, n_classes=1)
-    
-#     else:
-#         raise ValueError("Unknown model", opts.model)
-
-#     if opts.device == 'cuda' and torch.cuda.device_count() > 1:
-#         print(f"Using multiple CUDA devices ({torch.cuda.device_count()})")
-#         model = torch.nn.DataParallel(model)
-#     model = model.to(opts.device)
-   
-#     return model
 
 
-def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optimizer, opts, epoch, train_loss, params):    
+def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optimizer, opts, epoch, train_loss, params, fake_label):    
     '''
     load bs*sps slices per call
     '''
     # scaler = torch.cuda.amp.GradScaler() if opts.amp else None    # None
-    print('********************************************************Epoch{j}**********************************************', epoch)
-    model_encoder.train()
-    model_decoder.train()
-    model_wi.train()
-    model_age.train()
+    print(f'***********************************************  Epoch{epoch}  ***************************************************')
+    # model_encoder.train()
+    # model_decoder.train()
+    # model_wi.train()
+    # model_age.train()
 
     t1 = time.time()
 
@@ -184,7 +172,6 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
         # if idx == 1:
         #     break
         ages = ages.float()
-        print('age labels: ', ages)
         
         ''' 
             transform dataloader images: [10, 1, 182, 218, 182] to [80, 1, 182, 218]
@@ -230,8 +217,7 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
         y_site = np.array(y_site)
         torch_a = torch.from_numpy(y_site)       # a: true label (tensor) for one batch
         a = torch_a.to(opts.device)     # torch.Size([bs*sps])
-        # print('a: ', a)
-        np.save('/scratch_net/murgul/jiaxia/saved_models/test_image_0.npy', X[0])
+        # np.save('/scratch_net/murgul/jiaxia/saved_models/test_image_0.npy', X[0])
         torch_X = torch.from_numpy(X).to(opts.device)     # torch.Size([bs*sps, 1, 182, 218])
         torch_age = ages.repeat_interleave(opts.sps).to(opts.device) 
 
@@ -262,11 +248,10 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
         # Stack the list of tensors into a single tensor
         b_batch = torch.stack(b_batch)
         b_batch = b_batch.to(opts.device) 
-        # print('b_batch shape: ', b_batch.shape)
 
         # start training
         with torch.cuda.amp.autocast():   # automatic mixed precision
-
+        # with open('ffff', 'w') as f:
             '''
             masks_encoder_out: a^ + zi
             zi_b_batch: zi + b
@@ -278,12 +263,11 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
 
             '''
 
-            # print('torch X shape: ', torch_X.shape)      # torch.Size([4, 1, 182, 218])
             masks_encoder_out, torch_X_en_x1, torch_X_en_x2, torch_X_en_x3, torch_X_en_x4 = model_encoder(torch_X)   # input one batch image to encoder
-            # print('encoder output shape: ', masks_encoder_out.shape)    # supposed: torch.Size([bs*sps, 960])
 
             zi = masks_encoder_out[:, 64: ]   # zi for output of the encoder
-            print('zi: ', zi)
+            
+            # print('zi: ', zi)
             print('zi shape: ', zi.shape)
             
             a_hat = masks_encoder_out[:, : 64]    # a^ for output of the encoder (zt)
@@ -297,23 +281,17 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             zi_hat = zi_hat_b_hat[:, 64: ]
             b_hat = zi_hat_b_hat[:, : 64]
             zi_hat_a = torch.cat((a, zi_hat), dim=1)
-            # print('zi_hat_a shape: ', zi_hat_a.shape)
             xi_a_hat = model_decoder(zi_hat_a, xi_b_hat_en_x1, xi_b_hat_en_x2, xi_b_hat_en_x3, xi_b_hat_en_x4)
             age_pred = model_age(zi)
-            print('age_pred: ', age_pred)
 
-            print('forward ok')
+            # print('forward ok')
 
             # define w_t and w_i
             wt = nn.Identity()
             wt_zt = wt(a_hat)
-            print('wt(zt) shape: ', wt_zt.shape)
-            print('wt(zt): ', wt_zt)
-
             wi_zi = model_wi(zi)
-            print('wi(zi) shape: ', wi_zi.shape)
-            print('wi(zi): ', wi_zi)
-            print('zi: ', zi.shape)
+
+            sigmoid = nn.Sigmoid()
 
             '''
             compute 6 losses
@@ -329,36 +307,58 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             
             recon_criterion = nn.MSELoss()
             bce_criterion = nn.BCEWithLogitsLoss(reduction='mean')
-          
+            
             recon_loss = recon_criterion(mask_recon, true_masks.float())
-            print('recon loss: ', recon_loss)
+
+            # fake_label = torch.full((4, 64), 0.5).to(opts.device)
 
             exc_loss = bce_criterion(wt_zt, a)
+            ce_criterion = cross_entropy_with_probs
+            inh_loss = ce_criterion(wi_zi, fake_label)
             # inh_loss = -bce_criterion(wi_zi, a)
+            # exc_loss = F.binary_cross_entropy(wt_zt, a, reduction='sum')
+            # inh_loss = F.binary_cross_entropy(wi_zi, fake_label, reduction='sum')
             age_loss = recon_criterion(age_pred, torch_age)
-            inh_loss = 1 / (1 + recon_criterion(wi_zi, a))
-
-            print('exc loss: ', exc_loss)
-            print('inh loss: ', inh_loss)
-            print('age loss: ', age_loss)
+            # inh_loss = 1 / (1 + recon_criterion(wi_zi, a))
 
             cycle_loss = recon_criterion(xi_a_hat, true_masks.float())
-            print('cycle loss: ', cycle_loss)
             latent_loss = recon_criterion(zi_hat, zi)
-            print('latent loss: ', latent_loss)
             cc_loss = correlation_loss(xi_b_hat, torch_X)    # torch.Size([bs*sps, 1, 182, 218])
-            print('cc loss: ', cc_loss)
 
-            if epoch <= 5:
-                loss = 7 * recon_loss + 5.0 * exc_loss + 0.5 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss
-            elif 5 < epoch <= 49:
-                loss = 8 * recon_loss + 5.0 * exc_loss + 0.5 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss
+            if epoch < 20:
+                loss = 3 * recon_loss + 6.0 * exc_loss + 0.1 * inh_loss + 1 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss
             else:
-                loss = 8 * recon_loss + 5.0 * exc_loss + 0.5 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss + 0.1 * age_loss.float()
-            print('loss: ', loss)
-            print('loss shape: ', loss.shape)
+                loss = 3 * recon_loss + 6.0 * exc_loss + 0.1 * inh_loss + 0.5 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss + 0.5 * age_loss.float()
+            # else:
+            #     loss = 3 * recon_loss + 4.0 * exc_loss + 0.5 * inh_loss + 3 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss + 0.5 * age_loss.float()
+            # if epoch <= 1:
+            # loss = age_loss.float()
+            # loss = 5 * recon_loss + 3.0 * exc_loss + 0.5 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 3.5 * cc_loss + 0.1 * age_loss.float()
+
             train_loss.append(loss.item())  
-      
+
+            if idx == 1:
+                print('a: ', a)
+                print('b_batch: ', b_batch)
+                print('age labels: ', ages)
+                print('age_pred: ', age_pred)
+                print('sigmoid(zt): ', sigmoid(a_hat))
+                print('zt: ', a_hat)
+                print('sigmoid(wi(zi)): ', sigmoid(wi_zi))
+                print('zi: ', zi)
+                print('recon loss: ', recon_loss)
+                print('exc loss: ', exc_loss)
+                print('inh loss: ', inh_loss)
+                print('age loss: ', age_loss)
+                print('cycle loss: ', cycle_loss)
+                print('latent loss: ', latent_loss)
+                print('cc loss: ', cc_loss)
+                print('loss: ', loss)
+
+            
+            print('zi: ', zi)
+            print('sigmoid(wi(zi)): ', sigmoid(wi_zi))
+        
         # back propagation
 
             optimizer.zero_grad()
@@ -367,7 +367,7 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
             grad_scaler.step(optimizer)
             grad_scaler.update()
-            print('backprop ok')
+            # print('backprop ok')
 
         if idx % 50 == 0:
 
@@ -386,7 +386,7 @@ if __name__ == '__main__':
     torch.backends.cudnn.allow_tf32 = True
         
     opts = parse_arguments()
-    run = wandb.init(project='openbhb_cdae_0524_balanced_64_cdae_age_mlp_2', dir='/scratch_net/murgul/jiaxia/saved_models')
+    run = wandb.init(project='openbhb_cdae_0529_balanced_64_2', dir='/scratch_net/murgul/jiaxia/saved_models')
     print("WandB Project Name:", run.project)
     config = wandb.config
     config.learning_rate = opts.lr
@@ -399,7 +399,7 @@ if __name__ == '__main__':
     model_encoder = model_encoder.to(opts.device)
     model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
     model_decoder = model_decoder.to(opts.device)
-    model_wi = Wi_Net()
+    model_wi = Wi_Net(input_dim=960, output_dim=64)
     model_wi = model_wi.to(opts.device)
     model_age = Age_Net(input_dim=960).float()
     model_age = model_age.to(opts.device)
@@ -412,8 +412,8 @@ if __name__ == '__main__':
     param_decoder = list(model_decoder.parameters())
     param_wi = list(model_wi.parameters())
     param_age_mlp = list(model_age.parameters())
-    # params = param_encoder + param_decoder + param_wi + param_age_mlp
-    params = param_encoder + param_decoder + param_wi
+    params = param_encoder + param_decoder + param_wi + param_age_mlp
+    # params = param_encoder + param_decoder + param_wi
 
     optimizer = torch.optim.RMSprop(params, lr=opts.lr, weight_decay=opts.weight_decay, momentum=opts.momentum)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
@@ -426,11 +426,16 @@ if __name__ == '__main__':
     if opts.amp:
         print("Using AMP")
     
-    start_time = time.time()
-    best_acc = 0.
+    # start_time = time.time()
+    # best_acc = 0.
 
     # training 
     train_loss = []
+    fake_label = torch.full((4, 64), 1/64).to(opts.device)
+    # random_tensor = torch.rand(opts.bs * opts.sps, 64).to(opts.device)
+    # fake_label_1 = random_tensor / random_tensor.sum(dim=1, keepdim=True)
+
+    # print('fake label: ', fake_label_1)
     # torch.backends.cudnn.enabled = False
     wandb.watch(model_decoder, log="all")
     wandb.watch(model_encoder, log="all")
@@ -438,7 +443,18 @@ if __name__ == '__main__':
 
     for epoch in range(0, opts.epochs):
         adjust_learning_rate(opts, optimizer, epoch)
-        train(train_loader, model_encoder, model_decoder, model_wi, model_age, optimizer, opts, epoch, train_loss, params)
+        train(train_loader, model_encoder, model_decoder, model_wi, model_age, optimizer, opts, epoch, train_loss, params, fake_label)
+        if epoch == 29:
+            checkpoint = {
+                'epoch': epoch,
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
+                'wi_net_state_dict': model_wi.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+            }
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch30.pth')
+
         if epoch == 49:
             checkpoint = {
                 'epoch': epoch,
@@ -448,12 +464,8 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_epoch50.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch50.pth')
 
-        if epoch == 50:
-            optimizer.add_param_group({'params': param_age_mlp})
-        if epoch >= 50:
-            params = param_encoder + param_decoder + param_wi + param_age_mlp
         if epoch == 99:
             checkpoint = {
                 'epoch': epoch,
@@ -463,7 +475,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_epoch100.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch100.pth')
         if epoch == 149:
             checkpoint = {
                 'epoch': epoch,
@@ -473,7 +485,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_epoch150.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch150.pth')
 
         if epoch == 199:
             checkpoint = {
@@ -484,7 +496,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_epoch200.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch200.pth')
         if epoch == 249:
             checkpoint = {
                 'epoch': epoch,
@@ -494,7 +506,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_epoch250.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch250.pth')
         if epoch == 299:
             checkpoint = {
                 'epoch': epoch,
@@ -504,11 +516,31 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_epoch300.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch300.pth')
+        
+        # if epoch % 50 == 0:
+            # save_file = os.path.join(save_dir, f"ckpt_epoch_{epoch}.pth")
+            # save_model(model, optimizer, opts, epoch, save_file)
+
+            # mae_train, mae_int, mae_ext = compute_age_mae(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
+            # writer.add_scalar("train/mae", mae_train, epoch)
+            # writer.add_scalar("test/mae_int", mae_int, epoch)
+            # writer.add_scalar("test/mae_ext", mae_ext, epoch)
+            # print("Age MAE:", mae_train, mae_int, mae_ext)
+
+            # ba_train, ba_int, ba_ext = compute_site_ba(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
+            # writer.add_scalar("train/site_ba", ba_train, epoch)
+            # writer.add_scalar("test/ba_int", ba_int, epoch)
+            # writer.add_scalar("test/ba_ext", ba_ext, epoch)
+            # print("Site BA:", ba_train, ba_int, ba_ext)
+
+            # challenge_metric = ba_int**0.3 * mae_ext + (1 / 64) ** 0.3 * mae_int
+            # writer.add_scalar("test/score", challenge_metric, epoch)
+            # print("Challenge score", challenge_metric)
 
     print('train loss: ', train_loss)
     train_loss_numpy = np.array(train_loss)
-    np.save('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3_loss.npy', train_loss_numpy)
+    np.save('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_loss.npy', train_loss_numpy)
     
     checkpoint = {
             'epoch': epoch,
@@ -518,7 +550,9 @@ if __name__ == '__main__':
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
             }
-    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0524_all_3.pth')
+    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc.pth')
+
+    
 
 
     
