@@ -36,7 +36,7 @@ def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal va
 class OpenBHB(torch.utils.data.Dataset):
     # def __init__(self, root, train=True, internal=True, transform=None, fast=False, load_feats=None):
     def __init__(self, root, train=True, internal=True, transform=None, fast=False):
-        print('###########################OpenBHB#########################')
+        # print('###########################OpenBHB#########################')
         self.root = root
 
         if train and not internal:
@@ -147,8 +147,8 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
         self.stop = cumsum[index]
         
         self.masks = dict((key, val["path"]) for key, val in self.MASKS.items())
-        self.masks["vbm"] = "./data/masks/cat12vbm_space-MNI152_desc-gm_TPM.nii.gz"
-        self.masks["quasiraw"] = "./data/masks/quasiraw_space-MNI152_desc-brain_T1w.nii.gz"
+        self.masks["vbm"] = "/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/cat12vbm_space-MNI152_desc-gm_TPM.nii.gz"
+        self.masks["quasiraw"] = "/usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/quasiraw_space-MNI152_desc-brain_T1w.nii.gz"
 
         self.mock = mock
         if mock:
@@ -182,3 +182,28 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
         select_X = select_X.reshape(self.MODALITIES[self.dtype]["shape"])
         # print('transformed.shape', select_X.shape)   # （1, 182, 218, 182）
         return select_X
+
+'''
+if __name__ == '__main__':
+    import sys
+    from torchvision import transforms
+    # from .transforms import Crop, Pad
+
+    selector = FeatureExtractor("quasiraw")
+
+    T_pre = transforms.Lambda(lambda x: selector.transform(x))
+    T_train = transforms.Compose([
+        T_pre,
+        # Crop((1, 121, 128, 121), type="random"),
+        # Pad((1, 128, 128, 128)),
+        transforms.Lambda(lambda x: torch.from_numpy(x)),
+        transforms.Normalize(mean=0.0, std=1.0)
+    ])
+
+    train_loader = torch.utils.data.DataLoader(OpenBHB(sys.argv[1], train=True, internal=True, transform=T_train),
+                                               batch_size=4, shuffle=True, num_workers=8,
+                                               persistent_workers=True)
+    
+    x, y1, y2 = next(iter(train_loader))
+    print(x.shape, y1, y2)
+'''

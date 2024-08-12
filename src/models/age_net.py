@@ -8,47 +8,47 @@ class Age_Net(nn.Module):
 
         
         self.layers = nn.Sequential(
-            # # first linear + BN + ReLU + Dropout
+            # # # first linear + BN + ReLU + Dropout
 
-            # nn.Linear(input_dim, 2048),
-            # nn.BatchNorm1d(2048),
-            # nn.ReLU(),
-            # nn.Dropout(dropout_rate),
+            nn.Linear(input_dim, 2048),
+            nn.BatchNorm1d(2048),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate),
 
-            # # second linear+ BN + ReLU + Dropout
-            # nn.Linear(2048, 1024),
-            # nn.BatchNorm1d(1024),
-            # nn.ReLU(),
-            # nn.Dropout(dropout_rate),
+            # second linear+ BN + ReLU + Dropout
+            nn.Linear(2048, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate),
 
-            # # third linear + BN + ReLU + Dropout
-            # nn.Linear(1024, 512),
-            # nn.BatchNorm1d(512),
-            # nn.ReLU(),
-            # nn.Dropout(dropout_rate),
-
-            # # fourth linear + sigmoid
-            # nn.Linear(512, output_dim),
-            # nn.Identity()
-        
-
-            nn.Linear(input_dim, 512),
+            # third linear + BN + ReLU + Dropout
+            nn.Linear(1024, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(),
             nn.Dropout(dropout_rate),
-            
-            nn.Linear(512, 256),
-            nn.BatchNorm1d(256),
-            nn.ReLU(),
-            nn.Dropout(dropout_rate),
 
-            nn.Linear(256, 128),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
-            nn.Dropout(dropout_rate),
-
-            nn.Linear(128, output_dim),
+            # fourth linear + sigmoid
+            nn.Linear(512, output_dim),
             nn.Identity()
+        
+
+            # nn.Linear(input_dim, 512),
+            # nn.BatchNorm1d(512),
+            # nn.ReLU(),
+            # nn.Dropout(dropout_rate),
+            
+            # nn.Linear(512, 256),
+            # nn.BatchNorm1d(256),
+            # nn.ReLU(),
+            # nn.Dropout(dropout_rate),
+
+            # nn.Linear(256, 128),
+            # nn.BatchNorm1d(128),
+            # nn.ReLU(),
+            # nn.Dropout(dropout_rate),
+
+            # nn.Linear(128, output_dim),
+            # nn.Identity()
         
         )
         

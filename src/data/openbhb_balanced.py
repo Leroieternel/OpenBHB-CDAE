@@ -62,7 +62,7 @@ def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal va
     list_indices_top3 = indices_top3.index.tolist()
     list_indices_top4 = indices_top4.index.tolist()
     list_indices_top5 = indices_top5.index.tolist()
-    selected_site3 = np.random.choice(list_indices_site3, size=200, replace=False)
+    selected_site3 = np.random.choice(list_indices_site3, size=50, replace=False)
     selected_top2 = np.random.choice(list_indices_top2, size=50, replace=False)
     selected_top3 = np.random.choice(list_indices_top3, size=50, replace=False)
     selected_top4 = np.random.choice(list_indices_top4, size=50, replace=False)
@@ -91,9 +91,9 @@ def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal va
 
     y_arr_balanced_new = y_arr_balanced
     print('y_arr_balanced shape: ', y_arr_balanced_new.shape)
-    mapping = {3: 0, 1: 1, 10: 2, 17: 3, 24: 4}
+    # mapping = {3: 0, 1: 1, 10: 2, 17: 3, 24: 4}
 
-    y_arr_balanced_new[:, 1] = np.array([mapping[value] for value in y_arr_balanced[:, 1]])
+    # y_arr_balanced_new[:, 1] = np.array([mapping[value] for value in y_arr_balanced[:, 1]])
     print('y_arr_balanced new: ', y_arr_balanced_new)
 
     return x_arr_balanced, y_arr_balanced

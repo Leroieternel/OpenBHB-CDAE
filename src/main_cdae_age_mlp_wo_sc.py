@@ -130,23 +130,22 @@ def get_transforms(opts):
 
 def load_data(opts):
     T_train, T_test = get_transforms(opts)
-    # print('T train shape: ', T_train)     # Compose()
     T_train = NViewTransform(T_train, opts.n_views)
 
     train_dataset = OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train)
-    # train_loader_score = torch.utils.data.DataLoader(OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train),
-    #                                                  batch_size=opts.bs, shuffle=True, num_workers=3,
-    #                                                  persistent_workers=True)
 
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opts.bs, shuffle=True, num_workers=3,
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opts.bs, shuffle=True, num_workers=2,
                                                persistent_workers=True, drop_last=True)
+    train_loader_score = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train),
+                                                     batch_size=opts.bs, shuffle=True, num_workers=2,
+                                                     persistent_workers=True)
     test_internal = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=False, internal=True, transform=T_test), 
-                                                batch_size=opts.bs, shuffle=False, num_workers=3,
+                                                batch_size=opts.bs, shuffle=False, num_workers=2,
                                                 persistent_workers=True, drop_last=True)
     test_external = torch.utils.data.DataLoader(OpenBHB(opts.data_dir, train=False, internal=False, transform=T_test), 
-                                                batch_size=opts.bs, shuffle=False, num_workers=3,
+                                                batch_size=opts.bs, shuffle=False, num_workers=2,
                                                 persistent_workers=True, drop_last=True)
-    return train_loader, test_internal, test_external
+    return train_loader, train_loader_score, test_internal, test_external
 
 
 
@@ -321,8 +320,9 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
 
             # fake_label = torch.full((4, 64), 0.5).to(opts.device)
             sites = sites.to(opts.device)
+            # ce_criterion = cross_entropy_with_probs
             exc_loss = bce_criterion(a_hat, a)
-            inh_loss = cross_entropy_with_probs(wi_zi, fake_label)
+            inh_loss = bce_criterion(wi_zi, fake_label)
             # inh_loss = -bce_criterion(wi_zi, a)
             # exc_loss = F.binary_cross_entropy(wt_zt, a, reduction='sum')
             # inh_loss = F.binary_cross_entropy(wi_zi, fake_label, reduction='sum')
@@ -333,10 +333,12 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             latent_loss = recon_criterion(zi_hat, zi)
             cc_loss = correlation_loss(xi_b_hat, torch_X)    # torch.Size([bs*sps, 1, 182, 218])
 
-            if epoch < 20:
-                loss = 3 * recon_loss + 6.0 * exc_loss + 0.1 * inh_loss + 1 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss
+            if epoch <= 5:
+                loss = 7 * recon_loss + 5.0 * exc_loss + 0.2 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5 * cc_loss
+            elif 5 < epoch <= 29:
+                loss = 8 * recon_loss + 5.0 * exc_loss + 0.2 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss
             else:
-                loss = 3 * recon_loss + 6.0 * exc_loss + 0.1 * inh_loss + 0.5 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss + 0.5 * age_loss.float()
+                loss = 8 * recon_loss + 5.0 * exc_loss + 0.2 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss + 0.1 * age_loss.float()
 
             train_loss.append(loss.item())  
 
@@ -390,15 +392,16 @@ if __name__ == '__main__':
     torch.backends.cudnn.allow_tf32 = True
         
     opts = parse_arguments()
-    run = wandb.init(project='openbhb_cdae_0529_balanced_64_2_wo_skip_connection', dir='/scratch_net/murgul/jiaxia/saved_models')
+    run = wandb.init(project='openbhb_cdae_0601_balanced_64_wo_skip_connection', dir='/scratch_net/murgul/jiaxia/saved_models')
     print("WandB Project Name:", run.project)
     config = wandb.config
     config.learning_rate = opts.lr
     
     # set_seed(opts.trial)
 
-    # train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
-    train_loader, test_loader_int, test_loader_ext = load_data(opts)
+    train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
+    # train_loader, test_loader_int, test_loader_ext = load_data(opts)
+    # train_loader = load_data(opts)
     model_encoder = models.UNet_Encoder_1(n_channels=1)
     model_encoder = model_encoder.to(opts.device)
     model_decoder = models.UNet_Decoder_1(n_channels=1, n_classes=1)
@@ -435,7 +438,7 @@ if __name__ == '__main__':
 
     # training 
     train_loss = []
-    fake_label = torch.full((4, 64), 1/64)
+    fake_label = torch.full((4, 64), 0.5)
     fake_label = fake_label.to(opts.device)
     # random_tensor = torch.rand(opts.bs * opts.sps, 64).to(opts.device)
     # fake_label_1 = random_tensor / random_tensor.sum(dim=1, keepdim=True)
@@ -458,7 +461,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch30.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch30.pth')
 
         if epoch == 49:
             checkpoint = {
@@ -469,7 +472,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch50.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch50.pth')
 
         if epoch == 99:
             checkpoint = {
@@ -480,7 +483,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch100.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch100.pth')
         if epoch == 149:
             checkpoint = {
                 'epoch': epoch,
@@ -490,7 +493,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch150.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch150.pth')
 
         if epoch == 199:
             checkpoint = {
@@ -501,7 +504,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch200.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch200.pth')
         if epoch == 249:
             checkpoint = {
                 'epoch': epoch,
@@ -511,7 +514,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch250.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch250.pth')
         if epoch == 299:
             checkpoint = {
                 'epoch': epoch,
@@ -521,7 +524,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_epoch300.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch300.pth')
         
         # if epoch % 50 == 0:
             # save_file = os.path.join(save_dir, f"ckpt_epoch_{epoch}.pth")
@@ -545,7 +548,7 @@ if __name__ == '__main__':
 
     print('train loss: ', train_loss)
     train_loss_numpy = np.array(train_loss)
-    np.save('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_loss.npy', train_loss_numpy)
+    np.save('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_loss.npy', train_loss_numpy)
     
     checkpoint = {
             'epoch': epoch,
@@ -555,7 +558,7 @@ if __name__ == '__main__':
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
             }
-    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7.pth')
+    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo.pth')
 
     
 

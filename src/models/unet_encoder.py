@@ -71,6 +71,17 @@ class UNet_Encoder(nn.Module):
         self.flatten = nn.Flatten()
         self.fc = nn.Linear(64 * 11 * 13 * MULT, 1024)
 
+        self.apply(self._init_weights)
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Conv2d):
+            nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
         # self.up1 = (Up(1024, 512 // factor, bilinear))
         # self.up2 = (Up(512, 256 // factor, bilinear))
         # self.up3 = (Up(256, 128 // factor, bilinear))
@@ -115,5 +126,5 @@ class UNet_Encoder(nn.Module):
         # print('features_site shape: ', features.shape)
         # return features_site_removal
         # return features
-        return features[:, self.n_classes: ]
-        # return features[:, : self.n_classes]
+        # return features[:, self.n_classes: ]
+        return features[:, : self.n_classes]

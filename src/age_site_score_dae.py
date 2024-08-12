@@ -101,14 +101,14 @@ def load_data(opts):
 if __name__ == "__main__":
     print('hi')
     opts = parse_arguments()
-    model_encoder = models.UNet_Encoder(n_channels=1)
+    # model_encoder = models.UNet_Encoder_1(n_channels=1)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
     
     
     # load the network, single channel, 1 class
-    model_encoder = models.UNet_Encoder(n_channels=1)
-    model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
+    model_encoder = models.UNet_Encoder_1(n_channels=1)
+    model_decoder = models.UNet_Decoder_1(n_channels=1, n_classes=1)
     wi_net = Wi_Net(input_dim=960, output_dim=64, dropout_rate=0.5)
     age_net = Age_Net(input_dim=960)
     param_encoder = list(model_encoder.parameters())
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_300_mse_bs4_sps1_0517_all_7_epoch150.pth', map_location=device)
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0518_all_15_epoch100_inh.pth', map_location=device)
     
-    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_0525_2_epoch250.pth', map_location=device)
+    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_0601_1_wo_epoch100.pth', map_location=device)
     model_encoder.load_state_dict(checkpoint['model_encoder_state_dict'])
     # model_decoder.load_state_dict(checkpoint['model_decoder_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -149,12 +149,12 @@ if __name__ == "__main__":
     #         print(name, param.data)
 
     
-    # mae_train, mae_int, mae_ext = compute_age_mae(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
-    # print("Age MAE:", mae_train, mae_int, mae_ext)
+    mae_train, mae_int, mae_ext = compute_age_mae(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
+    print("Age MAE:", mae_train, mae_int, mae_ext)
     # compute_site_ba(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
     ba_train, ba_int = compute_site_ba(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
     print("Site BA:", ba_train, ba_int)  
-    # print("Age MAE:", mae_train, mae_int, mae_ext) 
-    # challenge_metric = ba_int**0.3 * mae_ext + (1 / 64) ** 0.3 * mae_int
-    # print("Challenge score", challenge_metric)
+    print("Age MAE:", mae_train, mae_int, mae_ext) 
+    challenge_metric = ba_int**0.3 * mae_ext + (1 / 64) ** 0.3 * mae_int
+    print("Challenge score", challenge_metric)
 

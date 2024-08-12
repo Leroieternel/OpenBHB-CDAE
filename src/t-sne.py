@@ -157,6 +157,7 @@ if __name__ == "__main__":
     
     
     # load the network, single channel, 1 class
+    '''
     model_encoder = models.UNet_Encoder(n_channels=1)
     model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
     wi_net = Wi_Net(input_dim=507, output_dim=5, dropout_rate=0.5)
@@ -169,24 +170,29 @@ if __name__ == "__main__":
     params = param_encoder + param_decoder + param_wi + param_age_mlp
     optimizer = torch.optim.RMSprop(params)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
-
-    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0525_2_epoch300.pth', map_location='cpu')  #
+    '''
+    # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0525_2_epoch300.pth', map_location='cpu')  #
     
-    # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/unet_100_0124_mse_bs4_0410.pth', map_location='cpu')
-    model_encoder.load_state_dict(checkpoint['model_encoder_state_dict'])  #
+    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0525_2_epoch300.pth', map_location='cpu')
+    model = models.UNet_Encoder(n_channels=1, n_classes=64).to(device)
+    model.load_state_dict(checkpoint['model_encoder_state_dict']) 
+    # model_encoder.load_state_dict(checkpoint['model_encoder_state_dict'])  #
     # model_decoder.load_state_dict(checkpoint['model_decoder_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])  #
-    scheduler.load_state_dict(checkpoint['scheduler_state_dict'])  #
+    # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])  #
+    # scheduler.load_state_dict(checkpoint['scheduler_state_dict'])  #
     # wi_net.load_state_dict(checkpoint['wi_net_state_dict'])
-    model_encoder = model_encoder.to(device)
+    # model_encoder = model_encoder.to(device)
     # wi_net = wi_net.to(device)
-    model_encoder.eval()
-    model_decoder.eval()
-    wi_net.eval()
-    age_net.eval()
+    # model_encoder.eval()
+    # model_decoder.eval()
+    # wi_net.eval()
+    # age_net.eval()
 
-    train_features, labels = gather_site_feats(model_encoder, train_loader, opts)
+    # train_features, labels = gather_site_feats(model_encoder, train_loader, opts)
+    train_features, labels = gather_site_feats(model, train_loader, opts)
     # tsne = TSNE(n_components=2, random_state=42)
+    color_mapping = {3: 'mediumorchid', 1: 'skyblue', 10: 'mediumturquoise', 17: 'mediumseagreen', 24: 'gold'}
+    point_colors = [color_mapping[label] for label in labels]
 
 
     tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300)
@@ -198,10 +204,13 @@ if __name__ == "__main__":
 
     # t-SNE 结果的可视化
     plt.figure(figsize=(10, 8))
-    scatter = plt.scatter(transformed_features[:, 0], transformed_features[:, 1], c=labels, cmap='viridis', alpha=0.6, s=50)
+    scatter = plt.scatter(transformed_features[:, 0], transformed_features[:, 1], c=point_colors, cmap='viridis', alpha=0.6, s=80)
+    handles = [plt.Line2D([0], [0], marker='o', color=color, linestyle='', markersize=10, label=f'{label}')
+           for label, color in color_mapping.items()]
     plt.colorbar(scatter)
     plt.title('t-SNE Visualization of Data from 5 Sites')
-    plt.legend(*scatter.legend_elements(), title="Sites")
+    # plt.legend(*scatter.legend_elements(), title="Sites")
+    plt.legend(handles=handles, title="Sites")
     print(labels[:100])
     plt.xlabel('t-SNE Component 1')
     plt.ylabel('t-SNE Component 2')

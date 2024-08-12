@@ -107,18 +107,20 @@ if __name__ == "__main__":
     
     
     # load the network, single channel, 1 class
-    model_encoder = models.UNet_Encoder(n_channels=1)
-    model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
-    wi_net = Wi_Net(input_dim=960, output_dim=64, dropout_rate=0.5)
-    age_net = Age_Net(input_dim=960)
-    param_encoder = list(model_encoder.parameters())
-    param_decoder = list(model_decoder.parameters())
-    param_wi = list(wi_net.parameters())
-    param_age_mlp = list(age_net.parameters())
-    # params = param_encoder + param_decoder + param_wi
-    params = param_encoder + param_decoder + param_wi + param_age_mlp
-    optimizer = torch.optim.RMSprop(params)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
+    
+    model_encoder = models.UNet_Encoder_1(n_channels=1)
+    # model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
+    # wi_net = Wi_Net(input_dim=960, output_dim=64, dropout_rate=0.5)
+    # age_net = Age_Net(input_dim=960)
+    # param_encoder = list(model_encoder.parameters())
+    # param_decoder = list(model_decoder.parameters())
+    # param_wi = list(wi_net.parameters())
+    # param_age_mlp = list(age_net.parameters())
+    # # params = param_encoder + param_decoder + param_wi
+    # params = param_encoder + param_decoder + param_wi + param_age_mlp
+    # optimizer = torch.optim.RMSprop(params)
+    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
+    
 
     # cpy unet to device
     
@@ -128,21 +130,24 @@ if __name__ == "__main__":
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_500_mse_bs4_sps1_0510_balanced_4_8_5_3_4_2.pth', map_location=device)
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0514_3.5_5_15_2_4_2.5_inh10.pth', map_location=device)
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/dae_300_mse_bs4_sps1_0517_all_7_epoch150.pth', map_location=device)
-    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch100.pth', map_location='cpu')  #
-    
+    checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0601_1_wo_epoch50.pth', map_location=device)  #
+    # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/ae_0602_1_wo_epoch100.pth', map_location='cuda')
+
     # checkpoint = torch.load('/scratch_net/murgul/jiaxia/saved_models/unet_100_0124_mse_bs4_0410.pth', map_location='cpu')
     model_encoder.load_state_dict(checkpoint['model_encoder_state_dict'])  #
     # model_decoder.load_state_dict(checkpoint['model_decoder_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])  #
-    scheduler.load_state_dict(checkpoint['scheduler_state_dict'])  #
+    # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])  #
+    # scheduler.load_state_dict(checkpoint['scheduler_state_dict'])  #
     # wi_net.load_state_dict(checkpoint['wi_net_state_dict'])
     model_encoder = model_encoder.to(device)
     # wi_net = wi_net.to(device)
     model_encoder.eval()
-    model_decoder.eval()
-    wi_net.eval()
-    age_net.eval()
-    
+    # model_decoder.eval()
+    # wi_net.eval()
+    # age_net.eval()
+    # model = models.UNet(n_channels=1, n_classes=1).to(device)
+    # model.load_state_dict(checkpoint['model_state_dict']) 
+    # model.eval()
     # print('hi')
     # print(model_encoder.inc.double_conv[0].weight)
     # print('******************************')

@@ -1,0 +1,17 @@
+program: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/cdae_3d_age.py
+data_dir: /usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data
+save_dir:  /home/jiaxia/brain-age-mri
+epochs: 300
+# batch_size: 6
+lr: 1e-4
+lr_decay: step
+lr_decay_rate: 0.9
+lr_decay_step: 10
+# optimizer: adam
+momentum: 0.9
+weight_decay: 5e-5
+# train_all: 1
+# method: yaware
+# kernel: gaussian
+# sigma: 1
+tf: none

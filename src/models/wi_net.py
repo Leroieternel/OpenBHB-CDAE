@@ -27,7 +27,7 @@ class Wi_Net(nn.Module):
             nn.LeakyReLU(),
             nn.Dropout(dropout_rate),
 
-            # fourth linear + sigmoid
+            # fourth linear
             nn.Linear(128, output_dim),
             # nn.Identity(),
         )

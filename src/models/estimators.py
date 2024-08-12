@@ -26,10 +26,9 @@ class AgeEstimator(BaseEstimator):
         return y_pred
     
     def score(self, X, y):
-        prediction = cross_val_predict(self.age_estimator.best_estimator_, X, y, cv=5)
-        print('ground truth age: ', y)
-        print('predicted age: ', prediction)
         y_pred = self.age_estimator.predict(X)
+        print('gt age: ', y)
+        print('predicted age: ', y_pred)
         return mean_absolute_error(y, y_pred)
 
 class SiteEstimator(BaseEstimator):
@@ -50,10 +49,10 @@ class SiteEstimator(BaseEstimator):
         return self.site_estimator.predict(X)
 
     def score(self, X, y):
-        prediction = cross_val_predict(self.site_estimator.best_estimator_, X, y, cv=5)
+        site_pred = self.site_estimator.predict(X)
         print('ground truth site: ', y)
-        print('predicted site: ', prediction)
-        cm = confusion_matrix(y, prediction)
+        print('predicted site: ', site_pred)
+        cm = confusion_matrix(y, site_pred)
         plt.figure(figsize=(12, 10))
         sns.heatmap(cm, annot=True, fmt="d")
         plt.xlabel('Predicted')
@@ -61,7 +60,5 @@ class SiteEstimator(BaseEstimator):
         # plt.show()
         plt.savefig('/home/jiaxia/unet_test/contrastive-brain-age-prediction/src/confusion_matrix_1.jpg')
         return self.site_estimator.score(X, y)
-    
-    # def plot_confusion_matrix(self, X, y):
-    #     prediction = cross_val_predict(self.site_estimator.best_estimator_, X, y, cv=5)
+
         

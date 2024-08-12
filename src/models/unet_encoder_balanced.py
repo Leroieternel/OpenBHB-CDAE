@@ -115,5 +115,5 @@ class UNet_Encoder_b(nn.Module):
         # print('features_site shape: ', features.shape)
         # return features_site_removal
         # return features
-        # return features[:, self.n_classes: ]
-        return features[:, : self.n_classes]
+        return features[:, self.n_classes: ]
+        # return features[:, : self.n_classes]

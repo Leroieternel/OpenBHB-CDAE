@@ -58,7 +58,7 @@ def parse_arguments():
     parser.add_argument('--gradient_clipping', type=int, help='max gradient norm', default=1.0)
 
     # Data
-    parser.add_argument('--train_all', type=arg2bool, help='train on all dataset including validation (int+ext)', default=True)
+    # parser.add_argument('--train_all', type=arg2bool, help='train on all dataset including validation (int+ext)', default=True)
     parser.add_argument('--tf', type=str, help='data augmentation', choices=['none', 'crop', 'cutout', 'all'], default='all')
     
     # Loss 
@@ -166,12 +166,12 @@ def load_model(opts):
     return model
 
 
-def train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, params):    
+def train(train_loader, model_encoder, model_decoder, model_age, optimizer, opts, epoch, train_loss, params):    
     '''
     load bs*sps slices per call
     '''
     
-    scaler = torch.cuda.amp.GradScaler() if opts.amp else None    # None
+    grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
     
 
     t1 = time.time()
@@ -220,61 +220,72 @@ def train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, pa
         print('torch_X: ', torch_X)
         print('torch age: ', torch_age)
 
-        recon_criterion = nn.MSELoss()
+        
 
         # start training
-        with torch.cuda.amp.autocast(scaler is not None):   # automatic mixed precision
-            _, masks_pred = model(torch_X)   # output dimension: torch.Size([48, 1, 182, 218])
-            features_flattened = model.features(torch_X)
-            if idx == 1:
-                print('features_flattened shape: ', features_flattened.shape)
-            age_pred = model_age(features_flattened)
+        with torch.cuda.amp.autocast():   # automatic mixed precision
+            recon_criterion = nn.MSELoss()
+        # with open('ffff', 'w') as f:
+            z_i, *rest = model_encoder(torch_X)
+            mask_pred = model_decoder(z_i, *rest)
+            recon_loss = recon_criterion(mask_pred, true_masks.float())
+
+            age_pred = model_age(z_i)
             age_loss = recon_criterion(age_pred, torch_age)
+            
+            print('recon loss: ', recon_loss)
+            print('age loss: ', age_loss)
 
-            print('masks_pred shape: ', masks_pred.shape)
-            print('true mask shape: ', true_masks.shape)
-            recon_loss = recon_criterion(masks_pred, true_masks.float())
-
-            if epoch <= 5:
-                loss = 8 * recon_loss
-            elif 5 < epoch <= 49:
+            if epoch <= 29:
                 loss = 7 * recon_loss
             else:
-                loss = 7 * recon_loss + 0.1 * age_loss.float()
+                loss = 8 * recon_loss + 0.1 * age_loss.float()
       
             train_loss.append(loss.item())    
 
         
-        optimizer.zero_grad()
-        grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
-        grad_scaler.scale(loss).backward()
-        grad_scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
-        grad_scaler.step(optimizer)
-        grad_scaler.update()
-        print('backprop ok')
+            optimizer.zero_grad()
+            # grad_scaler = torch.cuda.amp.GradScaler(enabled=opts.amp)
+            grad_scaler.scale(loss).backward()
+            grad_scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(params, opts.gradient_clipping)
+            grad_scaler.step(optimizer)
+            grad_scaler.update()
+            print('backprop ok')
 
-    if idx % 50 == 0:
+        if idx % 50 == 0:
 
-        wandb.log({'epoch': epoch, 'loss': loss.item(), 'recon_loss:': recon_loss.item(), 'age_loss': age_loss.item()})
-        wandb.log({"original_images": wandb.Image(torch_X[0]), "xi_a_hat_images": wandb.Image(masks_pred[0])})
+            wandb.log({'epoch': epoch, 'loss': loss.item(), 'recon_loss:': recon_loss.item(), 'age_loss': age_loss.item()})
+            wandb.log({"original_images": wandb.Image(torch_X[0]), "xi_a_hat_images": wandb.Image(mask_pred[0])})
 
 
     # return masks_pred
 
 if __name__ == '__main__':
     torch.cuda.empty_cache()
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.benchmark = True
+    torch.backends.cudnn.deterministic = False
+    torch.backends.cudnn.allow_tf32 = True
     opts = parse_arguments()
 
     # train_loader, train_loader_score, test_loader_int, test_loader_ext = load_data(opts)
     train_loader, test_loader_int, test_loader_ext = load_data(opts)
-    model = load_model(opts)
-    model_age = Age_Net(input_dim=146432).float().to(opts.device)
-    model.train()
+    # model = load_model(opts)
+    model_encoder = models.UNet_Encoder(n_channels=1)
+    model_encoder = model_encoder.to(opts.device)
+    model_decoder = models.UNet_Decoder(n_channels=1, n_classes=1)
+    model_decoder = model_decoder.to(opts.device)
+    model_age = Age_Net(input_dim=1024).float().to(opts.device)
+
+    model_encoder.train()
+    model_decoder.train()
     model_age.train()
-    params_unet = list(model.parameters())
+
+    param_encoder = list(model_encoder.parameters())
+    param_decoder = list(model_decoder.parameters())
     param_age_mlp = list(model_age.parameters())
-    params = params_unet + param_age_mlp
+    params = param_encoder + param_decoder + param_age_mlp
 
     optimizer = torch.optim.RMSprop(params, lr=opts.lr, weight_decay=opts.weight_decay, momentum=opts.momentum)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=5) 
@@ -283,79 +294,90 @@ if __name__ == '__main__':
     print('Optimizer:', optimizer)
     print('Scheduler:', opts.lr_decay)
 
-    if opts.amp:
-        print("Using AMP")
+    # if opts.amp:
+    #     print("Using AMP")
     
-    start_time = time.time()
-    best_acc = 0.
+    # start_time = time.time()
+    # best_acc = 0.
 
     # training 
     train_loss = []
-    wandb.init(project='openbhb_cdae_0525_ae_mlp_1', dir='/scratch_net/murgul/jiaxia/saved_models')
+    wandb.init(project='openbhb_cdae_0531_ae_mlp_1', dir='/scratch_net/murgul/jiaxia/saved_models')
     config = wandb.config
     config.learning_rate = opts.lr
-    wandb.watch(model, log="all")
+    wandb.watch(model_decoder, log="all")
+    wandb.watch(model_encoder, log="all")
+    wandb.watch(model_age, log="all")
+
+    print('start training ')
 
     for epoch in range(0, opts.epochs):
         adjust_learning_rate(opts, optimizer, epoch)
-        train(train_loader, model, model_age, optimizer, opts, epoch, train_loss, params)
+        train(train_loader, model_encoder, model_decoder, model_age, optimizer, opts, epoch, train_loss, params)
         if epoch == 29:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch30.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch30.pth')
         if epoch == 49:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch50.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch50.pth')
         
         if epoch == 99:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch100.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch100.pth')
         if epoch == 149:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch150.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch150.pth')
         if epoch == 199:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch200.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch200.pth')
         if epoch == 249:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch250.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch250.pth')
         if epoch == 299:
             checkpoint = {
                 'epoch': epoch,
-                'model_state_dict': model.state_dict(),
+                'model_encoder_state_dict': model_encoder.state_dict(),
+                'model_decoder_state_dict': model_decoder.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1_epoch300.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1_epoch300.pth')
 
     print('train loss: ', train_loss)
     train_loss_numpy = np.array(train_loss)
@@ -363,11 +385,12 @@ if __name__ == '__main__':
     
     checkpoint = {
             'epoch': epoch,
-            'model_state_dict': model.state_dict(),
+            'model_encoder_state_dict': model_encoder.state_dict(),
+            'model_decoder_state_dict': model_decoder.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
             }
-    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0525_1.pth')
+    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/ae_0531_1.pth')
 
 
     

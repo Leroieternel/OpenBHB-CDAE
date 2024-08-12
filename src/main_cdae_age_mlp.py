@@ -133,7 +133,7 @@ def load_data(opts):
     # print('T train shape: ', T_train)     # Compose()
     T_train = NViewTransform(T_train, opts.n_views)
 
-    train_dataset = OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train)
+    train_dataset = OpenBHB(opts.data_dir, train=True, internal=True, transform=T_train)
     # train_loader_score = torch.utils.data.DataLoader(OpenBHB_balanced_64(opts.data_dir, train=True, internal=True, transform=T_train),
     #                                                  batch_size=opts.bs, shuffle=True, num_workers=3,
     #                                                  persistent_workers=True)
@@ -268,7 +268,7 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             zi = masks_encoder_out[:, 64: ]   # zi for output of the encoder
             
             # print('zi: ', zi)
-            print('zi shape: ', zi.shape)
+            # print('zi shape: ', zi.shape)
             
             a_hat = masks_encoder_out[:, : 64]    # a^ for output of the encoder (zt)
             zi_b_batch = torch.cat((b_batch, zi), dim=1)
@@ -310,11 +310,9 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             
             recon_loss = recon_criterion(mask_recon, true_masks.float())
 
-            # fake_label = torch.full((4, 64), 0.5).to(opts.device)
-
-            exc_loss = bce_criterion(wt_zt, a)
             ce_criterion = cross_entropy_with_probs
-            inh_loss = ce_criterion(wi_zi, fake_label)
+            exc_loss = bce_criterion(wt_zt, a)
+            inh_loss = bce_criterion(wi_zi, fake_label)
             # inh_loss = -bce_criterion(wi_zi, a)
             # exc_loss = F.binary_cross_entropy(wt_zt, a, reduction='sum')
             # inh_loss = F.binary_cross_entropy(wi_zi, fake_label, reduction='sum')
@@ -325,15 +323,13 @@ def train(train_loader, model_encoder, model_decoder, model_wi, model_age, optim
             latent_loss = recon_criterion(zi_hat, zi)
             cc_loss = correlation_loss(xi_b_hat, torch_X)    # torch.Size([bs*sps, 1, 182, 218])
 
-            if epoch < 20:
-                loss = 3 * recon_loss + 6.0 * exc_loss + 0.1 * inh_loss + 1 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss
+            if epoch <= 5:
+                loss = 7 * recon_loss + 5.0 * exc_loss + 0.2 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5 * cc_loss
+            elif 5 < epoch <= 29:
+                loss = 8 * recon_loss + 5.0 * exc_loss + 0.2 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss
             else:
-                loss = 3 * recon_loss + 6.0 * exc_loss + 0.1 * inh_loss + 0.5 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss + 0.5 * age_loss.float()
-            # else:
-            #     loss = 3 * recon_loss + 4.0 * exc_loss + 0.5 * inh_loss + 3 * cycle_loss + 3 * latent_loss + 3.5 * cc_loss + 0.5 * age_loss.float()
-            # if epoch <= 1:
-            # loss = age_loss.float()
-            # loss = 5 * recon_loss + 3.0 * exc_loss + 0.5 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 3.5 * cc_loss + 0.1 * age_loss.float()
+                loss = 8 * recon_loss + 5.0 * exc_loss + 0.2 * inh_loss + 0.5 * cycle_loss + 4.0 * latent_loss + 5.5 * cc_loss + 0.1 * age_loss.float()
+
 
             train_loss.append(loss.item())  
 
@@ -386,7 +382,7 @@ if __name__ == '__main__':
     torch.backends.cudnn.allow_tf32 = True
         
     opts = parse_arguments()
-    run = wandb.init(project='openbhb_cdae_0529_balanced_64_2', dir='/scratch_net/murgul/jiaxia/saved_models')
+    run = wandb.init(project='openbhb_cdae_0531_balanced_64_2', dir='/scratch_net/murgul/jiaxia/saved_models')
     print("WandB Project Name:", run.project)
     config = wandb.config
     config.learning_rate = opts.lr
@@ -431,7 +427,7 @@ if __name__ == '__main__':
 
     # training 
     train_loss = []
-    fake_label = torch.full((4, 64), 1/64).to(opts.device)
+    fake_label = torch.full((4, 64), 0.5).to(opts.device)
     # random_tensor = torch.rand(opts.bs * opts.sps, 64).to(opts.device)
     # fake_label_1 = random_tensor / random_tensor.sum(dim=1, keepdim=True)
 
@@ -440,6 +436,7 @@ if __name__ == '__main__':
     wandb.watch(model_decoder, log="all")
     wandb.watch(model_encoder, log="all")
     wandb.watch(model_wi, log="all")
+    wandb.watch(model_age, log="all")
 
     for epoch in range(0, opts.epochs):
         adjust_learning_rate(opts, optimizer, epoch)
@@ -453,7 +450,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch30.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_epoch30.pth')
 
         if epoch == 49:
             checkpoint = {
@@ -464,7 +461,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch50.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_epoch50.pth')
 
         if epoch == 99:
             checkpoint = {
@@ -475,7 +472,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch100.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_epoch100.pth')
         if epoch == 149:
             checkpoint = {
                 'epoch': epoch,
@@ -496,7 +493,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch200.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_epoch200.pth')
         if epoch == 249:
             checkpoint = {
                 'epoch': epoch,
@@ -506,7 +503,7 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch250.pth')
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_epoch250.pth')
         if epoch == 299:
             checkpoint = {
                 'epoch': epoch,
@@ -516,31 +513,12 @@ if __name__ == '__main__':
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }
-            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_epoch300.pth')
-        
-        # if epoch % 50 == 0:
-            # save_file = os.path.join(save_dir, f"ckpt_epoch_{epoch}.pth")
-            # save_model(model, optimizer, opts, epoch, save_file)
+            torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_epoch300.pth')
 
-            # mae_train, mae_int, mae_ext = compute_age_mae(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
-            # writer.add_scalar("train/mae", mae_train, epoch)
-            # writer.add_scalar("test/mae_int", mae_int, epoch)
-            # writer.add_scalar("test/mae_ext", mae_ext, epoch)
-            # print("Age MAE:", mae_train, mae_int, mae_ext)
-
-            # ba_train, ba_int, ba_ext = compute_site_ba(model_encoder, train_loader_score, test_loader_int, test_loader_ext, opts)
-            # writer.add_scalar("train/site_ba", ba_train, epoch)
-            # writer.add_scalar("test/ba_int", ba_int, epoch)
-            # writer.add_scalar("test/ba_ext", ba_ext, epoch)
-            # print("Site BA:", ba_train, ba_int, ba_ext)
-
-            # challenge_metric = ba_int**0.3 * mae_ext + (1 / 64) ** 0.3 * mae_int
-            # writer.add_scalar("test/score", challenge_metric, epoch)
-            # print("Challenge score", challenge_metric)
 
     print('train loss: ', train_loss)
     train_loss_numpy = np.array(train_loss)
-    np.save('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc_loss.npy', train_loss_numpy)
+    np.save('/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc_loss.npy', train_loss_numpy)
     
     checkpoint = {
             'epoch': epoch,
@@ -550,7 +528,7 @@ if __name__ == '__main__':
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
             }
-    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0529_7_sc.pth')
+    torch.save(checkpoint, '/scratch_net/murgul/jiaxia/saved_models/cdae_300_mse_bs4_sps1_0531_1_sc.pth')
 
     
 

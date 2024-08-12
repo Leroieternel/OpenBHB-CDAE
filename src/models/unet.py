@@ -114,11 +114,11 @@ class UNet(nn.Module):
         x4 = self.down3(x3)
         x5 = self.down4(x4)
         # print('x shape: ', x.shape)      # x shape:  torch.Size([4, 1, 182, 218])
-        # print('x1 shape: ', x1.shape)    # x1 shape:  torch.Size([4, 64, 182, 218])
-        # print('x2 shape: ', x2.shape)    # x2 shape:  torch.Size([4, 128, 91, 109])
-        # print('x3 shape: ', x3.shape)    # x3 shape:  torch.Size([4, 256, 45, 54])
-        # print('x4 shape: ', x4.shape)    # x4 shape:  torch.Size([4, 512, 22, 27])
-        # print('x5 shape: ', x5.shape)    # x5 shape:  torch.Size([4, 1024, 11, 13])
+        # print('x1 shape: ', x1.shape)    # x1 shape:  torch.Size([4, 8, 182, 218])
+        # print('x2 shape: ', x2.shape)    # x2 shape:  torch.Size([4, 16, 91, 109])
+        # print('x3 shape: ', x3.shape)    # x3 shape:  torch.Size([4, 32, 45, 54])
+        # print('x4 shape: ', x4.shape)    # x4 shape:  torch.Size([4, 64, 22, 27])
+        # print('x5 shape: ', x5.shape)    # x5 shape:  torch.Size([4, 128, 11, 13])
         x = self.up1(x5, x4)
         # print('up1 shape: ', x.shape)    # up1 shape:  torch.Size([4, 512, 22, 27])
         x = self.up2(x, x3)
@@ -147,10 +147,10 @@ class UNet(nn.Module):
         features, *rest = self.forward(x)
         features_flattened = torch.flatten(features, start_dim=1)
     
-        print('features shape: ', features.shape)      # torch.Size([4, 1024, 11, 13])
-        print('features flattened shape: ', features_flattened.shape) 
+        # print('features shape: ', features.shape)      # torch.Size([4, 1024, 11, 13])
+        # print('features flattened shape: ', features_flattened.shape) 
 
         encoder_features = self.fc(features_flattened)
-        print('encoder_features shape: ', encoder_features.shape)
+        # print('encoder_features shape: ', encoder_features.shape)
 
         return encoder_features

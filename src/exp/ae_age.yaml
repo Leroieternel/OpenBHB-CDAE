@@ -1,4 +1,4 @@
-program: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/cnn_age_pred.py
+program: /home/jiaxia/unet_test/contrastive-brain-age-prediction/src/ae_3d_age.py
 data_dir: /usr/bmicnas02/data-biwi-01/bmicdatasets-originals/Originals/openBHB/brain_age_with_site_removal-main/data
 save_dir:  /home/jiaxia/brain-age-mri
 epochs: 200

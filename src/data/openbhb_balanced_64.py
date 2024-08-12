@@ -54,7 +54,7 @@ def read_data(path, dataset, fast):    # read train: (395, 3659572)  internal va
     indices_top1 = df[df['site'].isin(site_3)]
     list_indices_top_rest = indices_top_rest.index.tolist()
     list_indices_site3 = indices_top1.index.tolist()
-    selected_site3 = np.random.choice(list_indices_site3, size=50, replace=False)
+    selected_site3 = np.random.choice(list_indices_site3, size=200, replace=False)
     print('filtered_indices_top2to5: ', len(list_indices_top_rest))
     print('length of filtered_indices_top1: ', len(selected_site3))
     print('filtered_indices_top1: ', selected_site3)
